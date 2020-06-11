@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="案例详情：将一个字符串尽可能正确的解析成python的数据类型。  在python内置库configparser中，提供了一种解析配置文件的功能。可以从配置文件中读取值，并且可以解析成一些python的数据类型。但是需要指定方法来解析成对应的数据类型，不足够智能。因此提供一种策略按照 “boolean &gt; int  &gt; float &gt; str” 的顺序智能地把字符串解析成pyth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python字符串的内容转换成对应数据类型">
+<meta property="og:url" content="https://geekac.github.io/2018/11/16/Python%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%86%85%E5%AE%B9%E8%BD%AC%E6%8D%A2%E6%88%90%E5%AF%B9%E5%BA%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Achange&#39;s home">
+<meta property="og:description" content="案例详情：将一个字符串尽可能正确的解析成python的数据类型。  在python内置库configparser中，提供了一种解析配置文件的功能。可以从配置文件中读取值，并且可以解析成一些python的数据类型。但是需要指定方法来解析成对应的数据类型，不足够智能。因此提供一种策略按照 “boolean &gt; int  &gt; float &gt; str” 的顺序智能地把字符串解析成pyth">
+<meta property="article:published_time" content="2018-11-16T04:47:00.000Z">
+<meta property="article:modified_time" content="2018-11-16T09:58:22.204Z">
+<meta property="article:author" content="achange">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://geekac.github.io/2018/11/16/Python字符串的内容转换成对应数据类型/"/>
+
+
+
+
+
+  <title>Python字符串的内容转换成对应数据类型 | Achange's home</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Achange's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I think, therefore i am.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://geekac.github.io/2018/11/16/Python%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%86%85%E5%AE%B9%E8%BD%AC%E6%8D%A2%E6%88%90%E5%AF%B9%E5%BA%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="achange">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Achange's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python字符串的内容转换成对应数据类型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-16T12:47:00+08:00">
+                2018-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Python%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">Python编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>案例详情：将一个字符串<span style="color:red">尽可能正确</span>的解析成python的数据类型。</p>
+<blockquote>
+<p>在python内置库configparser中，提供了一种解析配置文件的功能。可以从配置文件中读取值，并且可以解析成一些python的数据类型。但是需要指定方法来解析成对应的数据类型，不足够智能。因此提供一种策略按照 “boolean &gt; int  &gt; float &gt; str” 的顺序智能地把字符串解析成python数据类型。案例基于以下代码：</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># parse.py</span></span><br><span class="line"><span class="comment"># --------</span></span><br><span class="line">DATA = <span class="string">"""</span></span><br><span class="line"><span class="string">[data]</span></span><br><span class="line"><span class="string">have_money = False</span></span><br><span class="line"><span class="string">b = 10</span></span><br><span class="line"><span class="string">pi = 3.1415</span></span><br><span class="line"><span class="string">name = jack</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> configparser</span><br><span class="line"></span><br><span class="line">config = configparser.ConfigParser()</span><br><span class="line">config.read_string(DATA)</span><br><span class="line"><span class="comment"># 用法，例如获取pi的值</span></span><br><span class="line">pi = config.getfloat(section=<span class="string">'data'</span>, option=<span class="string">'pi'</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="Python中try-except-finally的错误用法："><a href="#Python中try-except-finally的错误用法：" class="headerlink" title="Python中try-except-finally的错误用法："></a>Python中try-except-finally的错误用法：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_value</span><span class="params">(section, option)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">return</span> config.getboolean(section, option)</span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> config.getint(section, option)</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">return</span> config.getfloat(section, option)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="keyword">return</span> config.get(section, option)</span><br><span class="line"></span><br><span class="line">print(type(parse_value(<span class="string">'data'</span>, <span class="string">'have_money'</span>)), end=<span class="string">' '</span>)</span><br><span class="line">print(type(parse_value(<span class="string">'data'</span>, <span class="string">'b'</span>)), end=<span class="string">' '</span>)</span><br><span class="line">print(type(parse_value(<span class="string">'data'</span>, <span class="string">'pi'</span>)), end=<span class="string">' '</span>)</span><br><span class="line">print(type(parse_value(<span class="string">'data'</span>, <span class="string">'name'</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment">#返回结果：&lt;class 'bool'&gt; &lt;class 'str'&gt; &lt;class 'str'&gt; &lt;class 'str'&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这种方式只能正确的解析为bool类型的数据(因为第一个try返回的是getboolean()调用的返回值)，其余都解析成str。</p>
+<p>错误原因：</p>
+<p>​    在于try-except-finally的语法中，无论try下的代码抛出异常与否，最终都会执行finally。</p>
+<p>​    因此当不能解析成bool值的时候，进入到第二个try语句，这是一个完整的try-except-finally语法。</p>
+<p>​    在解析b=10的时候，无法解析成布尔值，进入第二个try，getint()可以解析成整数。但是，函数还是返回了str类型，说明执行了默认返回字符串的config.get()函数！！</p>
+<p><span style="color:red">IMPORTANT： 深入理解try-except-finally</span></p>
+<p><strong>(1) 代码如何执行？</strong></p>
+<blockquote>
+<p>在CSDN上看到一个不严谨的解释：</p>
+<p>finally有一个特性，那就是无论如何，finally中的代码都将被执行。</p>
+<p>那么当执行到try中return的时候函数fun将被结束返回，这个时候由于finally的特性，try中的return ‘try return’ 经暂时被挂起，当执行完finally中的语句之后再返回执行，可finally中却执行了另一个return，导致了函数直接结束了，此时try中的finally就被丢失了。</p>
+</blockquote>
+<p>​     深入的理解就是，finally在某些情况可能令try-except中代码的执行失效，包括return，甚至quit()也不能退出程序(已验证)！！注意，无论如何try-except中代码还是会执行，只不过像return/quit()/exit()这些代码无法阻止finally代码块的执行。</p>
+<ol>
+<li><p>try代码块不发生异常：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">verify</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        print(<span class="string">'try code block'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'try'</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        print(<span class="string">'except code block'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'except'</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        print(<span class="string">'finally code block'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'finally'</span></span><br><span class="line">print(verify())</span><br><span class="line"><span class="string">"""Results:</span></span><br><span class="line"><span class="string">try code block</span></span><br><span class="line"><span class="string">finally code block</span></span><br><span class="line"><span class="string">finally</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>try代码块里有异常发生，并且被except捕获：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">verify</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        print(<span class="string">'before exception occurs...'</span>)</span><br><span class="line">        print(<span class="number">1</span>/<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'try'</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        print(<span class="string">'except code block'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'except'</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        print(<span class="string">'finally code block'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'finally'</span></span><br><span class="line">print(verify())</span><br><span class="line"><span class="string">"""Results:</span></span><br><span class="line"><span class="string">before exception occurs...</span></span><br><span class="line"><span class="string">except code block</span></span><br><span class="line"><span class="string">finally code block</span></span><br><span class="line"><span class="string">finally</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>由此可见，try中异常之前的代码会被正确执行，然后跳转到except代码块中。</p>
+<p>如果try-except后有finally语句，try-except中退出函数/程序的代码将会被挂起，然后执行finally中的代码。如果finally中没有退出函数/程序，将继续执行try-except中应该执行的退出语句。</p>
+<table>
+<thead>
+<tr>
+<th>执行顺序</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>try—发生异常?–&gt;执行except—-&gt;except执行退出语句前检查有finally?—-&gt;挂起退出—&gt;执行finally<br>如果finally中有退出函数/程序的语句？—–&gt;退出程序<br>如果finally中没有有退出函数/程序的语句！—-&gt;根据异常情况交给try/except进行退出程序/函数</td>
+</tr>
+</tbody></table>
+<p>所以，在我们的实际开发中我们应尽量避免在finally使用return语句返回。</p>
+<p><strong>(2) 变量的作用域问题</strong></p>
+<ul>
+<li><p>python能够改变变量作用域的代码段是def、class、lamda.</p>
+</li>
+<li><p>if/elif/else、try/except/finally、for/while 并不能涉及变量作用域的更改，也就是说他们的代码块中的变量，在外部也是可以访问的。</p>
+<p><span style="color:red">但是这种情况下要注意：如果变量首次被定义在这些语句块中。可能条件都不满足，导致出现引用未定义的变量错误！！</span></p>
+<p>因此推荐在if/try/for之前先定义一下所使用的变量。(具体案例见下<strong>方案2</strong>)</p>
+</li>
+<li><p>变量搜索路径是：本地变量-&gt;全局变量</p>
+</li>
+</ul>
+<h5 id="两种可行方案"><a href="#两种可行方案" class="headerlink" title="两种可行方案"></a>两种可行方案</h5><ul>
+<li><p><strong>方案1</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_parse_value</span><span class="params">(section, option)</span>:</span></span><br><span class="line">	order_functions = [config.getboolean, config.getint,</span><br><span class="line">                       config.getfloat, config.get]</span><br><span class="line">    <span class="keyword">for</span> fun <span class="keyword">in</span> order_functions:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> fun(section, option)</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">pass</span>    <span class="comment"># continue is also ok.</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>方案2：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_value</span><span class="params">(section, option)</span>:</span></span><br><span class="line">    value = <span class="literal">None</span> <span class="comment"># 如果就是字符串类型时，不定义value=None吗，会出现 引用未定义变量的错误！！</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        value = config.getboolean(section, option)</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                value = config.getint(section, option)</span><br><span class="line">                <span class="keyword">except</span> ValueError:</span><br><span class="line">                    value = config.getfloat(section, option)</span><br><span class="line">                    <span class="keyword">finally</span>:</span><br><span class="line">                        ret = value <span class="keyword">if</span> value <span class="keyword">else</span> config.get(section, option)</span><br><span class="line">                        <span class="keyword">return</span> ret</span><br><span class="line"><span class="comment"># 辣眼睛的代码....</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+</li>
+</ul>
+<h5 id="言归正传，不使用configparser应该怎么做？"><a href="#言归正传，不使用configparser应该怎么做？" class="headerlink" title="言归正传，不使用configparser应该怎么做？"></a>言归正传，不使用configparser应该怎么做？</h5><p>只需要注意解析bool值就行了，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将这些特殊字符串(yes/no/True/False/on/off)解析成布尔值</span></span><br><span class="line">BOOLEAN_STATES = &#123;<span class="string">'yes'</span>: <span class="literal">True</span>, <span class="string">'true'</span>: <span class="literal">True</span>, <span class="string">'on'</span>: <span class="literal">True</span>,</span><br><span class="line">                  <span class="string">'no'</span>: <span class="literal">False</span>, <span class="string">'false'</span>: <span class="literal">False</span>, <span class="string">'off'</span>: <span class="literal">False</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_convert_to_boolean</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="string">"""Return a boolean value translating from other types if necessary.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> value.lower() <span class="keyword">not</span> <span class="keyword">in</span> BOOLEAN_STATES:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'Not a boolean: %s'</span> % value)</span><br><span class="line">        <span class="keyword">return</span> BOOLEAN_STATES[value.lower()]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_value</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="string">"""在使用_convert_to_boolean/int/float/str将字符串解析成python对应数据类型的时候</span></span><br><span class="line"><span class="string">       注意：</span></span><br><span class="line"><span class="string">            整数可以被解析成小数，所以一定先尝试解析成整数</span></span><br><span class="line"><span class="string">            bool值可以被解析成字符串</span></span><br><span class="line"><span class="string">       因此尝试解析的顺序为： boolean &gt; int &gt; float &gt; str</span></span><br><span class="line"><span class="string">       :param value:字符串类型的参数值</span></span><br><span class="line"><span class="string">       :return:对应python数据类型的参数值</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    order_functions = [_convert_to_boolean, int, float, str]</span><br><span class="line">    <span class="keyword">for</span> fun <span class="keyword">in</span> order_functions:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> fun(value)</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">pass</span>    <span class="comment"># continue is also ok.</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/12/node-js%E5%92%8CJavaScript%E7%9A%84%E5%85%B3%E7%B3%BB/" rel="next" title="node.js和JavaScript的关系">
+                <i class="fa fa-chevron-left"></i> node.js和JavaScript的关系
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/18/python%E5%86%85%E7%BD%AE%E5%BA%93%E4%B9%8Bargparse/" rel="prev" title="python内置库之argparse">
+                python内置库之argparse <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">achange</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#Python中try-except-finally的错误用法："><span class="nav-number">1.</span> <span class="nav-text">Python中try-except-finally的错误用法：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#两种可行方案"><span class="nav-number">2.</span> <span class="nav-text">两种可行方案</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#言归正传，不使用configparser应该怎么做？"><span class="nav-number">3.</span> <span class="nav-text">言归正传，不使用configparser应该怎么做？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">achange</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.Python的几种实现方式[1] Cpython python的官方版本，也就是从官网发布的最广泛的版本。使用C语言实现，新的语言特性一般也最先出现在这里。CPython实现会将源文件（py文件）转换成字节码文件（pyc文件），然后运行在Python虚拟机上。  Jpython   【引】什么是Cython？ 由于python代码在某些情况下运行速度低，而且主流的python实现方式是使用C语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python前导篇">
+<meta property="og:url" content="https://geekac.github.io/2018/09/27/python%E5%89%8D%E5%AF%BC%E7%AF%87/index.html">
+<meta property="og:site_name" content="Achange&#39;s home">
+<meta property="og:description" content="1.Python的几种实现方式[1] Cpython python的官方版本，也就是从官网发布的最广泛的版本。使用C语言实现，新的语言特性一般也最先出现在这里。CPython实现会将源文件（py文件）转换成字节码文件（pyc文件），然后运行在Python虚拟机上。  Jpython   【引】什么是Cython？ 由于python代码在某些情况下运行速度低，而且主流的python实现方式是使用C语">
+<meta property="article:published_time" content="2018-09-27T02:11:06.000Z">
+<meta property="article:modified_time" content="2019-01-06T10:15:19.065Z">
+<meta property="article:author" content="achange">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://geekac.github.io/2018/09/27/python前导篇/"/>
+
+
+
+
+
+  <title>python前导篇 | Achange's home</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Achange's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I think, therefore i am.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://geekac.github.io/2018/09/27/python%E5%89%8D%E5%AF%BC%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="achange">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Achange's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python前导篇</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-27T10:11:06+08:00">
+                2018-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Python%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">Python编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="1-Python的几种实现方式-1"><a href="#1-Python的几种实现方式-1" class="headerlink" title="1.Python的几种实现方式[1]"></a>1.Python的几种实现方式<sup>[1]</sup></h5><ul>
+<li><p>Cpython</p>
+<p>python的官方版本，也就是从<a href="https://www.python.org/" target="_blank" rel="noopener">官网</a>发布的最广泛的版本。使用C语言实现，新的语言特性一般也最先出现在这里。CPython实现会将源文件（py文件）转换成字节码文件（pyc文件），然后运行在Python虚拟机上。</p>
+</li>
+<li><p>Jpython</p>
+</li>
+</ul>
+<p><strong>【引】什么是Cython？</strong></p>
+<p>由于python代码在某些情况下运行速度低，而且主流的python实现方式是使用C语言实现的。因此出现了一些看不惯python那么慢的人，将python源代码编译成C语言代码。但是又不仅仅如此！他们 (<a href="https://cython.org/" target="_blank" rel="noopener">https://cython.org/</a>)  的编译器不仅仅可以编译python编程语言，还支持一种C+Python风格的Cython编程语言。</p>
+<p>因此Cython是python的超集。</p>
+<p>Cython在线文档、性感教学：<a href="http://docs.cython.org/en/latest/" target="_blank" rel="noopener">http://docs.cython.org/en/latest/</a></p>
+<ul>
+<li><p><strong>这个东西是奇葩！</strong></p>
+<p>个人倾向于将Cython定义为python和C的结合体。虽然是编译器、一种语言(结合体语言)，但是又没有编译器，编译方法是使用基于python的第三方库：    <code>pip install Cython</code></p>
+</li>
+<li><p><strong>具体使用步骤</strong></p>
+<ul>
+<li><p>新建一个helloworld.pyx 文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"Hello World"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在helloworld.pyx 文件的同级目录下新建setup.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup</span><br><span class="line"><span class="keyword">from</span> Cython.Build <span class="keyword">import</span> cythonize</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    ext_modules = cythonize(<span class="string">"helloworld.pyx"</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用命令行运行setup.py文件：</p>
+<p><code>python setup.py build_ext --inplace</code></p>
+<p>编译可以得到.C和.pyd文件等。后面的具体应用参见其在线文档<a href="http://docs.cython.org/en/latest/" target="_blank" rel="noopener">http://docs.cython.org/en/latest/</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="混合编程？？？"><a href="#混合编程？？？" class="headerlink" title="混合编程？？？"></a>混合编程？？？</h2><h5 id="Python相关的文件格式-编译与反编译"><a href="#Python相关的文件格式-编译与反编译" class="headerlink" title="Python相关的文件格式(编译与反编译)"></a>Python相关的文件格式(编译与反编译)</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;①<strong>.</strong>py 是源文件；&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;②<strong>.</strong>pyc 是源文件编译后的文件</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;③<strong>.</strong>pyo是源文件优化编译后的文件</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;④<strong>.</strong>pyd是其他语言写的python库(python的动态链接库, 本质上和dll没区别,只是后缀名不同)</p>
+<p>​        .pyd文件并不是使用python编写而成，.pyd文件一般是其他语言编写的python扩展模块。（之前又在网上看到过有关解释，.pyd文件是用D语言按照一定的格式编写，并处理成二进制文件。那么什么是D语言呢？？它是c/c++的综合进化版，不仅具有二者的全部优点，而且整体性能更佳，但是其抽象程度高。）</p>
+<p>如果不希望源代码被看到，则可以将py源代码编译成pyc或者pyo格式的编译后的字节码文件。</p>
+<p><span style="color:red">注意：在python3.5版本之后，不再使用.pyo文件后缀，而是生成文件名类似“xxx.opt-n.pyc的文件。</span></p>
+<p><code>可以在cmd/dos窗口使用python xx.pyc来执行编译后的代码</code></p>
+<ul>
+<li><p>编译的方法是使用python提供的内置模块：<strong>py_compile</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> py_compile</span><br><span class="line">py_compile.compile(file=<span class="string">r'SourcePath/fileName.py'</span>, cfile=<span class="literal">None</span>, </span><br><span class="line">                   dfile=<span class="literal">None</span>, doraise=<span class="literal">False</span>, optimize=<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">"""参数说明：</span></span><br><span class="line"><span class="string">       file 表示需要编译的py文件的路径</span></span><br><span class="line"><span class="string">      cfile 表示编译后的pyc文件名称和路径，</span></span><br><span class="line"><span class="string">   		    默认为SourcePath/__pycache__/fileName.cpython-36.pyc</span></span><br><span class="line"><span class="string">   		    --&gt; "defaults to the PEP 3147/PEP 488 location."</span></span><br><span class="line"><span class="string">      dfile 错误消息保存的路径</span></span><br><span class="line"><span class="string">    doraise 可以是两个值，True或者False，如果为True，则会引发一个PyCompileError，</span></span><br><span class="line"><span class="string">            否则如果编译文件出错，则会有一个错误，默认显示sys.stderr中，而不会引发异常</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>如果想要编译指定目录下的所有python源代码文件，则使用内置模块：<strong>compileall</strong> </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> compileall</span><br><span class="line">compileall.compile_dir(dir=<span class="string">r'SourcePath'</span>, maxlevels=<span class="number">10</span>, ddir=<span class="literal">None</span>,</span><br><span class="line">                       force=<span class="literal">False</span>, rx=<span class="literal">None</span>, quiet=<span class="number">0</span>, legacy=<span class="literal">False</span>,</span><br><span class="line">                       optimize=<span class="number">-1</span>, workers=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">"""参数说明：</span></span><br><span class="line"><span class="string">        dir 表示需要编译的文件夹位置</span></span><br><span class="line"><span class="string">  maxlevels 表示需要递归编译的子目录的层数，默认是10层。</span></span><br><span class="line"><span class="string">       ddir # TODO: 暂时不清楚啥作用</span></span><br><span class="line"><span class="string">      force 如果为True，则会强制编译为pyc，即使现在的pyc文件是最新的，还会强制编译一次。</span></span><br><span class="line"><span class="string">            pyc文件中包含有时间戳，python编译器会根据时间来决定，是否需要重新生成一次pyc文件</span></span><br><span class="line"><span class="string">         rx 表示一个正则表达式，比如可以排除掉不想要的目录，或者只有符合条件的目录才进行编译</span></span><br><span class="line"><span class="string">      quiet 如果为True，则编译后，不会在标准输出中，打印出信息</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用命令进行编译</p>
+<p><code>python -m py_compile fileName.py</code>   # 把单个.py文件编译为字节码文件</p>
+<p><code>python -m compileall fileName.py</code>   # 也可以使用compileall编译单个文件<br><code>python -m compileall SourcePath</code>     # 批量生成字节码文件，SourcePath 是包含.py文件名的路径</p>
+</li>
+</ul>
+<ul>
+<li><p>使用命令进行优化编译为<strong>.</strong>pyo文件</p>
+<p><code>python -O -m py_compile fileName.py</code>   # 把单个.py文件编译为字节码文件</p>
+<p><code>python -O -m compileall fileName.py</code>   # 也可以使用compileall编译单个文件<br><code>python -O -m compileall SourcePath</code>     # 批量生成字节码文件，SourcePath 是包含.py文件名的路径</p>
+<p><span style="color:red">注意：</span> -O(大写字母O)也可以使用-OO</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-m参数相当于脚本中的import，这里的-m py_compile 相当于上面的 import py_compile，</span><br><span class="line">也即把后边跟随的库模块当做脚本运行。这样生成的字节码文件后缀名为.pyc。</span><br><span class="line"></span><br><span class="line">-O参数表明要生成更加紧凑的优化后的字节码,-OO会进一步移除-O选项生成的优化后的字节码文件中的文档字符串。这样生成的字节码文件后缀名为.pyo，对于.pyo文件可以通过python命令加-O参数执行导入了该模块的python程序来调用。</span><br><span class="line"></span><br><span class="line">需注意的是，不同版本编译后的pyc文件是不同的，比如2.5编译的pyc文件2.4版本的python是无法执行的。</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<p>Tips: 可以使用<strong>uncompyle6</strong>对pyc文件进行反编译。：</p>
+<p>安装：pip install uncompyle6  位置：…./Scripts/uncompyle6.exe</p>
+<p>使用：uncompyle6  xx.pyc &gt; fname.py</p>
+<h5 id="Python导入其他源文件"><a href="#Python导入其他源文件" class="headerlink" title="Python导入其他源文件"></a>Python导入其他源文件</h5><ul>
+<li><p>导入不在同一目录下的py文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, py_file_path)</span><br><span class="line">sys.path.append(py_file_path)	<span class="comment"># 这种方式需要注意文件同名时 加载的不是想要的py file.</span></span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+<h5 id="python一种特殊返回值的方式：实际上字典-列表的特殊用法（不定义字典名称）"><a href="#python一种特殊返回值的方式：实际上字典-列表的特殊用法（不定义字典名称）" class="headerlink" title="python一种特殊返回值的方式：实际上字典+列表的特殊用法（不定义字典名称）"></a>python一种特殊返回值的方式：实际上字典+列表的特殊用法（不定义字典名称）</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> .unet_2D <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .unet_3D <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .unet_nonlocal_2D <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .unet_nonlocal_3D <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .unet_grid_attention_3D <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .unet_CT_dsv_3D <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .unet_CT_single_att_dsv_3D <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .unet_CT_multi_att_dsv_3D <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .sononet <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> .sononet_grid_attention <span class="keyword">import</span> *</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_get_model_instance</span><span class="params">(name, tensor_dim)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">'unet'</span>: &#123;<span class="string">'2D'</span>: unet_2D, <span class="string">'3D'</span>: unet_3D&#125;,</span><br><span class="line">        <span class="string">'unet_nonlocal'</span>: &#123;<span class="string">'2D'</span>: unet_nonlocal_2D, <span class="string">'3D'</span>: unet_nonlocal_3D&#125;,</span><br><span class="line">        <span class="string">'unet_grid_gating'</span>: &#123;<span class="string">'3D'</span>: unet_grid_attention_3D&#125;,</span><br><span class="line">        <span class="string">'sononet'</span>: &#123;<span class="string">'2D'</span>: sononet&#125;,</span><br><span class="line">        <span class="string">'sononet2'</span>: &#123;<span class="string">'2D'</span>: sononet2&#125;,</span><br><span class="line">        <span class="string">'sononet_grid_attention'</span>: &#123;<span class="string">'2D'</span>: sononet_grid_attention&#125;</span><br><span class="line">    &#125;[name][tensor_dim]</span><br><span class="line"><span class="comment"># 注意学习这种用不同参数控制调用不同模型的放方法</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h5 id="python判断文件否是图片格式"><a href="#python判断文件否是图片格式" class="headerlink" title="python判断文件否是图片格式"></a>python判断文件否是图片格式</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_image_file</span><span class="params">(filename)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> any(filename.endswith(extension) <span class="keyword">for</span> extension <span class="keyword">in</span> [<span class="string">".bmp"</span>, <span class="string">".gif"</span>, <span class="string">"jpg"</span>])</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">	注意学习生成器的这种用法！！</span></span><br><span class="line"><span class="string">	expression for eg in conditions.</span></span><br><span class="line"><span class="string">	返回一个生成器。</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">	注意any()和all()内置函数：</span></span><br><span class="line"><span class="string">		any()有一个为真，返回True</span></span><br><span class="line"><span class="string">		all()都为真，才返回True.</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h5 id="python创建高维列表的方式"><a href="#python创建高维列表的方式" class="headerlink" title="python创建高维列表的方式"></a>python创建高维列表的方式</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""" 以2维为例，创建N*N的数组 """</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.使用生成器</span></span><br><span class="line">arr = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(N)] <span class="keyword">for</span> j <span class="keyword">in</span> range(N)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.使用循环：</span></span><br><span class="line">arr = [<span class="literal">None</span>]*N</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(N):</span><br><span class="line">    arr[i] = [<span class="literal">None</span>]*N</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3.错误示例--list赋值使用的是引用 浅拷贝！</span></span><br><span class="line">arr = [<span class="number">0</span>]*N</span><br><span class="line">arr = [arr]*N <span class="comment"># 或者下面也是错的</span></span><br><span class="line">arr = [arr <span class="keyword">for</span> _ <span class="keyword">in</span> range(N)]</span><br><span class="line"><span class="comment"># 这种方式修改每个值的时候 其他行对应的值也发生改变 因为是浅拷贝！</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> copy</span><br><span class="line">arr = [copy.deepcopy(arr)]*N <span class="comment"># ERROR!!! ==&gt;  *号作用于list就是浅拷贝！</span></span><br><span class="line">arr = [copy.deepcopy(arr) <span class="keyword">for</span> _ <span class="keyword">in</span> range(N)] <span class="comment"># Correct!!!</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="python以及其他语言在浮点数计算时，都存在精度的问题。"><a href="#python以及其他语言在浮点数计算时，都存在精度的问题。" class="headerlink" title="python以及其他语言在浮点数计算时，都存在精度的问题。"></a>python以及其他语言在浮点数计算时，都存在精度的问题。</h5><p>==&gt; 这根本上是计算机存储浮点数的问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="number">0.25</span><span class="number">-0.2</span>)</span><br><span class="line"><span class="comment"># output: 0.04999999999999999</span></span><br><span class="line">print(<span class="number">0.0042</span>/<span class="number">0.03</span>)</span><br><span class="line"><span class="comment"># output: 0.13999999999999999</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""解决办法：</span></span><br><span class="line"><span class="string">1.首先将浮点数转换成整数 乘以10^n 然后再除 ==&gt; 较为麻烦，需要先看多少位小数</span></span><br><span class="line"><span class="string">2.使用decimal模块，转换为str 再转换为int/float</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="keyword">from</span> decimal <span class="keyword">import</span> Decimal</span><br><span class="line">print(Decimal(<span class="string">'0.25'</span>)-Decimal(<span class="string">'0.2'</span>))</span><br><span class="line">print(Decimal(<span class="string">'0.0042'</span>)/Decimal(<span class="string">'0.03'</span>))</span><br><span class="line"><span class="comment"># output: 0.05 0.14</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="python执行系统命令的四种方法"><a href="#python执行系统命令的四种方法" class="headerlink" title="python执行系统命令的四种方法"></a>python执行系统命令的四种方法</h5><ul>
+<li><p><strong>os.system(command=””)</strong></p>
+<p>类似 C 中的 system() 函数，command 为os命令；<br>返回值在不同os上不同，Linux 返回值是执行命令的 exit 值，Window 返回值为执行命令后 shell 的返回值；<br>该方法无法获取到运行命令的输出；如果py文件在窗口执行 会自动打印结果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">res = os.system(<span class="string">"ipconfig"</span>) <span class="comment"># 自动打印如果含有中文会乱码</span></span><br><span class="line">print(res) <span class="comment"># windows下 0代表成功 1表示失败</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>os.popen(cmd, mode=”r”, buffering=-1)</strong></p>
+<blockquote>
+<p>参数详解：</p>
+<p>cmd：调用命令</p>
+<p>mode：返回 file 对象的模式，默认为 “r” 只读模式；”w”时 可以将返回值写到文件流中。</p>
+<p>buffering：缓冲区大小，默认 -1 为无限制</p>
+</blockquote>
+<p>该函数的内部实现是通过subprocess.Popen()，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">popen</span><span class="params">(cmd, mode=<span class="string">"r"</span>, buffering=<span class="number">-1</span>)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(cmd, str):</span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">"invalid cmd type (%s, expected string)"</span> % type(cmd))</span><br><span class="line">    <span class="keyword">if</span> mode <span class="keyword">not</span> <span class="keyword">in</span> (<span class="string">"r"</span>, <span class="string">"w"</span>):</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">"invalid mode %r"</span> % mode)</span><br><span class="line">    <span class="keyword">if</span> buffering == <span class="number">0</span> <span class="keyword">or</span> buffering <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">"popen() does not support unbuffered streams"</span>)</span><br><span class="line">    <span class="keyword">import</span> subprocess, io</span><br><span class="line">    <span class="keyword">if</span> mode == <span class="string">"r"</span>:</span><br><span class="line">        proc = subprocess.Popen(cmd,</span><br><span class="line">                                shell=<span class="literal">True</span>,</span><br><span class="line">                                stdout=subprocess.PIPE,</span><br><span class="line">                                bufsize=buffering)</span><br><span class="line">        <span class="keyword">return</span> _wrap_close(io.TextIOWrapper(proc.stdout), proc)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        proc = subprocess.Popen(cmd,</span><br><span class="line">                                shell=<span class="literal">True</span>,</span><br><span class="line">                                stdin=subprocess.PIPE,</span><br><span class="line">                                bufsize=buffering)</span><br><span class="line">        <span class="keyword">return</span> _wrap_close(io.TextIOWrapper(proc.stdin), proc)</span><br></pre></td></tr></table></figure>
+
+<p>该方法调用后会导致当前线程阻塞，直到调用的执行指令执行完毕；</p>
+<p>使用方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># mode="r"</span></span><br><span class="line">res_r = os.popen(<span class="string">"tasklist"</span>, mode=<span class="string">"r"</span>) <span class="comment"># tasklist系统当前执行的程序</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"1.log"</span>, <span class="string">"w"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> fw:</span><br><span class="line">    fw.write(res_r.read())</span><br><span class="line">print(res_r.read())</span><br><span class="line"></span><br><span class="line"><span class="comment"># mode="w"</span></span><br><span class="line">res_w = os.popen(<span class="string">"ipconfig"</span>, mode=<span class="string">"w"</span>)</span><br><span class="line">res_w.write(str=<span class="string">""</span>)</span><br><span class="line"><span class="comment"># 暂不清楚向里面写东西的目的...没办法读</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>subprocess.Popen类</strong></p>
+<blockquote>
+<p>这块还得重新写…区别于到底谁是阻塞的 非阻塞的</p>
+</blockquote>
+<p>上面两个都是用当前进程来调用，也就是说它们都是阻塞式的。<span style="color:red;">os.system()也是阻塞式的 尽管使用subprocess.Popen()实现!</span>  </p>
+<p>subprocess是在当前进程下面产生子进程，是非阻塞式的。如果运行cmd时产生的内容非常多，函数非常容易阻塞住。解决办法是不使用wait()方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os, subprocess</span><br><span class="line">res = subprocess.Popen(<span class="string">"python -m visdom.server"</span>, stdout=subprocess.PIPE, </span><br><span class="line">                       stderr=subprocess.STDOUT)</span><br><span class="line"><span class="comment"># stdout参数也可以是fw  =open("f.log", mode="w")</span></span><br><span class="line">res.wait() <span class="comment">#如果使用该命令，会一直等待子进程执行结束</span></span><br><span class="line"><span class="comment"># 获取输出</span></span><br><span class="line">output = res.stdout.read()</span><br><span class="line">print(output)</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>commands模块</p>
+<p> status， result =  commands.getstatusoutput(‘ls’)</p>
+<p> status：命令执行后的返回值，result为命令执行输出</p>
+<p><code>注意：不能解析非英文的字符</code></p>
+</li>
+</ul>
+<h5 id="使用python做OJ题目的模板"><a href="#使用python做OJ题目的模板" class="headerlink" title="使用python做OJ题目的模板"></a>使用python做OJ题目的模板</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># read input data</span></span><br><span class="line">        <span class="comment"># process....</span></span><br><span class="line">        <span class="comment"># 在题目的输入不给读取结束标记时候，使用EOFError来判断读取数据结束。</span></span><br><span class="line">    <span class="keyword">except</span> EOFError:</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h5 id="类方法前面加单下划线和双下划线："><a href="#类方法前面加单下划线和双下划线：" class="headerlink" title="类方法前面加单下划线和双下划线："></a>类方法前面加单下划线和双下划线：</h5><p>​    “_”：以单下划线开头的表示的是protected类型的变量，即只能允许其本身与子类进行访问；同时表示弱内部变量标示，如，当使用”from moduleName import *”时，不会将以一个下划线开头的对象引入。</p>
+<p>​    “__”：双下划线的表示的是私有类型的变量。只能是允许这个类本身进行访问了，连子类也不可以，这类属性在运行时属性名会加上单下划线和类名。</p>
+<p>​    python中的私有变量和私有方法仍然是可以访问的；访问方法如下：</p>
+<p>​        私有变量:  实例<strong>.</strong>_类名__变量名</p>
+<p>​        私有方法:  实例<strong>.</strong>_类名__方法名()    </p>
+<h5 id="python函数定义时，函数的注释"><a href="#python函数定义时，函数的注释" class="headerlink" title="python函数定义时，函数的注释"></a>python函数定义时，函数的注释</h5><ol>
+<li><p>静态注释</p>
+<ul>
+<li><p>参数注释的一般规则是参数名后跟一个冒号<strong>:</strong>，然后再跟一个expression。冒号后面表示需要传入参数的数据类型。</p>
+</li>
+<li><p><strong>-&gt;</strong>   后面是函数返回值类型的注释(expression)</p>
+</li>
+<li><p>注释的这个expression可以是任何形式。</p>
+<p><span style="color:gray">int，annotation可被保存为函数的attributes。</span></p>
+</li>
+</ul>
+<p>在python3.6及更高的版本。支持为变量添加注解，来显示这个变量的类型。</p>
+<p>同样也不是强制的规定，而是提醒。例如：<code>def f(a：int = 100)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">(ham: <span class="number">42</span>, eggs: int = <span class="string">'spam'</span>)</span> -&gt; "Nothing to see here":</span></span><br><span class="line">    print(<span class="string">"函数注释"</span>, f.__annotations__)</span><br><span class="line">    print(<span class="string">"参数值打印"</span>, ham, eggs)</span><br><span class="line">    print(type(ham), type(eggs))</span><br><span class="line"></span><br><span class="line">fun(<span class="string">"python"</span>)</span><br><span class="line"><span class="string">"""Results：</span></span><br><span class="line"><span class="string">函数注释 &#123;'ham': 42, 'eggs': &lt;class 'int'&gt;, 'return': 'Nothing to see here'&#125;</span></span><br><span class="line"><span class="string">参数值打印 python spam</span></span><br><span class="line"><span class="string">&lt;class 'str'&gt; &lt;class 'str'&gt;</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态注释</p>
+<p>动态注释的原理，就是在函数中或者装饰器中动态的增加 删除 更改 注释内容。</p>
+</li>
+</ol>
+<h5 id="python中的陷阱"><a href="#python中的陷阱" class="headerlink" title="python中的陷阱"></a>python中的陷阱</h5><p>python小陷阱：<a href="http://www.cnblogs.com/greatfish/p/6045081.html" target="_blank" rel="noopener">http://www.cnblogs.com/greatfish/p/6045081.html</a>   见下：</p>
+<br>
+
+<p>python中的函数的参数有两种类型：(1)不可变类型，如整数、字符串；(2)可变类型，如列表等。</p>
+<p>当函数参数的类型为可变类型时，有如下陷阱：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">append_item</span><span class="params">(item, ls=[])</span>:</span></span><br><span class="line">    ls.append(item)</span><br><span class="line">    <span class="keyword">return</span> ls</span><br><span class="line"></span><br><span class="line">print(append_item((<span class="number">1</span>)))  <span class="comment"># [1]</span></span><br><span class="line">print(append_item((<span class="number">2</span>)))  <span class="comment"># [1, 2]</span></span><br><span class="line">print(append_item((<span class="number">6</span>)))  <span class="comment"># [1, 2, 6]</span></span><br><span class="line"></span><br><span class="line">list2 = [<span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line">print(append_item(<span class="number">1</span>, list2))  <span class="comment"># [6, 7, 1]</span></span><br><span class="line">print(append_item(<span class="number">9</span>, list2))  <span class="comment"># [6, 7, 1,9]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>【</strong>解释<strong>】</strong>创建上面的函数时，ls参数被设置为引用一个新的列表，之后，在仅使用第一个参数调用该函数（即第二个使用默认参数）时，默认的列表都将是函数本身创建时指定的那个列表，因此将不会再有新的列表得以创建。list并不在函数调用结束后就释放资源。当它作为函数参数时，相当于<strong>全局变量</strong>，在函数预处理时就已经分配了内存空间。</p>
+<p><span style="color:red">每次调用判断是否传入一个list，如果没有传递该参数，就新建一个列表。<br/>或者直接避免给列表参数赋值为空列表，每次在函数内部进行判断类型，这是一个更好的做法！</span></p>
+<h5 id="python魔术方法"><a href="#python魔术方法" class="headerlink" title="python魔术方法"></a>python魔术方法</h5><p>to be filled.</p>
+<h5 id="python中字符-串-与数值"><a href="#python中字符-串-与数值" class="headerlink" title="python中字符(串)与数值"></a>python中字符(串)与数值</h5><p>ord(c):参数是长度为1的字符串，简称字符。当参数为统一对象时（unicode object），返回能代表该字符的统一编码，当参数为8比特的字符串时，返回该字节的值。例如，ord(‘a’)返回整形数值97，ord(u’\u2020’)返回8224。</p>
+<p>chr(i)：返回一个字符，字符的ascii码等于参数中的整形数值。例如chr(97)返回字符’a’，该方法是ord()的反方法。参数必须是0-255的整形数值，否则会抛出valueError错误。</p>
+<p>字符串的内置库string：</p>
+<p>​    </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string.digits</span><br><span class="line">string.ascii_letters = string.ascii_lowercase + string.ascii_uppercase</span><br><span class="line">string.printable</span><br></pre></td></tr></table></figure>
+
+<p>字符串类型的方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">string = <span class="string">"abc123"</span></span><br><span class="line">string.isalnum() string.isalpha()</span><br><span class="line">string.isdecimal() string.isdigit() string.isspace() string.isupper() string.islower()</span><br><span class="line"></span><br><span class="line">string.startswith() string.endswith()</span><br><span class="line"></span><br><span class="line">string.strip() string.lstrip() string.rstrip()</span><br><span class="line"></span><br><span class="line">string.split() string.rsplit()</span><br><span class="line"></span><br><span class="line">string.find() string.rfind()</span><br><span class="line">string.index() string.rindex()</span><br><span class="line"></span><br><span class="line">string.capitalize()</span><br><span class="line">string.swapcase()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<h6 id="注释样式积累"><a href="#注释样式积累" class="headerlink" title="注释样式积累"></a>注释样式积累</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 一种注释的方式</span></span><br><span class="line"><span class="comment"># =======================</span></span><br><span class="line"><span class="comment"># Help-formatting methods</span></span><br><span class="line"><span class="comment"># =======================</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<p>参考链接</p>
+<p>[1]  Python的几种实现方式 <a href="https://blog.csdn.net/xiongchun11/article/details/68485719" target="_blank" rel="noopener">https://blog.csdn.net/xiongchun11/article/details/68485719</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/26/PEP8-Python-%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" rel="next" title="PEP8 Python 编码规范">
+                <i class="fa fa-chevron-left"></i> PEP8 Python 编码规范
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/27/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84s/" rel="prev" title="卷积神经网络结构s">
+                卷积神经网络结构s <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">achange</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-Python的几种实现方式-1"><span class="nav-number">1.</span> <span class="nav-text">1.Python的几种实现方式[1]</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混合编程？？？"><span class="nav-number"></span> <span class="nav-text">混合编程？？？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Python相关的文件格式-编译与反编译"><span class="nav-number">1.</span> <span class="nav-text">Python相关的文件格式(编译与反编译)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Python导入其他源文件"><span class="nav-number">2.</span> <span class="nav-text">Python导入其他源文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python一种特殊返回值的方式：实际上字典-列表的特殊用法（不定义字典名称）"><span class="nav-number">3.</span> <span class="nav-text">python一种特殊返回值的方式：实际上字典+列表的特殊用法（不定义字典名称）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python判断文件否是图片格式"><span class="nav-number">4.</span> <span class="nav-text">python判断文件否是图片格式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python创建高维列表的方式"><span class="nav-number">5.</span> <span class="nav-text">python创建高维列表的方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python以及其他语言在浮点数计算时，都存在精度的问题。"><span class="nav-number">6.</span> <span class="nav-text">python以及其他语言在浮点数计算时，都存在精度的问题。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python执行系统命令的四种方法"><span class="nav-number">7.</span> <span class="nav-text">python执行系统命令的四种方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用python做OJ题目的模板"><span class="nav-number">8.</span> <span class="nav-text">使用python做OJ题目的模板</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#类方法前面加单下划线和双下划线："><span class="nav-number">9.</span> <span class="nav-text">类方法前面加单下划线和双下划线：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python函数定义时，函数的注释"><span class="nav-number">10.</span> <span class="nav-text">python函数定义时，函数的注释</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python中的陷阱"><span class="nav-number">11.</span> <span class="nav-text">python中的陷阱</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python魔术方法"><span class="nav-number">12.</span> <span class="nav-text">python魔术方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python中字符-串-与数值"><span class="nav-number">13.</span> <span class="nav-text">python中字符(串)与数值</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#注释样式积累"><span class="nav-number">13.1.</span> <span class="nav-text">注释样式积累</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">achange</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

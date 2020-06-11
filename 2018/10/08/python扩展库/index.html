@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="两本关于python标准库的书籍：  Python Standard Library (Python Standard Library by Fredrik Lundh) link: https:&#x2F;&#x2F;www.oreilly.com&#x2F;library&#x2F;view&#x2F;python-standard-library&#x2F;0596000960&#x2F; or reading online: https:&#x2F;&#x2F;www.cnb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python扩展库">
+<meta property="og:url" content="https://geekac.github.io/2018/10/08/python%E6%89%A9%E5%B1%95%E5%BA%93/index.html">
+<meta property="og:site_name" content="Achange&#39;s home">
+<meta property="og:description" content="两本关于python标准库的书籍：  Python Standard Library (Python Standard Library by Fredrik Lundh) link: https:&#x2F;&#x2F;www.oreilly.com&#x2F;library&#x2F;view&#x2F;python-standard-library&#x2F;0596000960&#x2F; or reading online: https:&#x2F;&#x2F;www.cnb">
+<meta property="article:published_time" content="2018-10-08T08:02:40.000Z">
+<meta property="article:modified_time" content="2018-11-21T08:28:01.824Z">
+<meta property="article:author" content="achange">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://geekac.github.io/2018/10/08/python扩展库/"/>
+
+
+
+
+
+  <title>python扩展库 | Achange's home</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Achange's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I think, therefore i am.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://geekac.github.io/2018/10/08/python%E6%89%A9%E5%B1%95%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="achange">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Achange's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python扩展库</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T16:02:40+08:00">
+                2018-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Python%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">Python编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>两本关于python标准库的书籍：</p>
+<ol>
+<li><p>Python Standard Library (Python Standard Library by Fredrik Lundh)</p>
+<p>link: <a href="https://www.oreilly.com/library/view/python-standard-library/0596000960/" target="_blank" rel="noopener">https://www.oreilly.com/library/view/python-standard-library/0596000960/</a></p>
+<p>or reading online: <a href="https://www.cnblogs.com/Maker-Liu/p/5528146.html" target="_blank" rel="noopener">https://www.cnblogs.com/Maker-Liu/p/5528146.html</a></p>
+<p>随书CD: <a href="https://resources.oreilly.com/examples/9780596000967/" target="_blank" rel="noopener">https://resources.oreilly.com/examples/9780596000967/</a></p>
+<p><strong>该作者的其他书籍在线</strong>:  <a href="http://www.pythonware.com/" target="_blank" rel="noopener">http://www.pythonware.com/</a></p>
+</li>
+<li><p>The Python Standard Library by Example (Doug Hellmann)</p>
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<p> python更新所有的包</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pip</span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> call</span><br><span class="line"></span><br><span class="line">package_list_str = <span class="string">" "</span>.join([dist.project_name <span class="keyword">for</span> dist <span class="keyword">in</span> pip.get_installed_distributions()])</span><br><span class="line"></span><br><span class="line">call(<span class="string">"pip install --upgrade "</span> + package_list_str, shell=<span class="literal">True</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+<h5 id="gettext-模块"><a href="#gettext-模块" class="headerlink" title="gettext 模块"></a>gettext 模块</h5><p>使用gettext模块翻译Python3源码以支持国际化</p>
+<p>你写了一个Python 3程序，还想要它适用于其他语言。你<em>能</em>复制全部代码库，然后刻意地检查每个.py文件，替换掉所有找到的文本字符串。但这意味着你有两份你代码的独立副本，每当你要做出个改动或修复个bug，你的工作量会加倍。而且如果你想要程序还适用于其他语言，就更糟了。</p>
+<hr>
+<p><span style="color:red">TODO: 了解一下 Python Language Services的一些库。比如parser — Access Python parse trees用于解析源代码 解析成抽象树! </span></p>
+<h5 id="configparser-内置库用法"><a href="#configparser-内置库用法" class="headerlink" title="configparser 内置库用法"></a>configparser 内置库用法</h5><p>这个库用于解析配置文件，配置文件需要满足一定的语法要求。通常是<strong>txt/ini</strong>的文件格式：</p>
+<ul>
+<li>配置文件中包含一个或多个section， 每个section用中括号括起来[section_name]</li>
+<li>[section_name]后面是该选项下的参数名以及参数值(或者说键值对)，使用分隔符 <strong>=</strong> 或 <strong>:</strong> 隔开。</li>
+<li>每个键值对占据一行，该行是一个option。在 option 分隔符两端的空格会被忽略掉。</li>
+<li>参数文件使用 <strong>#</strong> 和 <strong>;</strong> 作为行开头时，该行是注释，也就是说该行不是参数行，不会被解析成参数。</li>
+</ul>
+<p>使用方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> configparser</span><br><span class="line"></span><br><span class="line">config = configparser.ConfigParser()</span><br><span class="line">config.read(file, encoding=<span class="string">'utf-8'</span>)	<span class="comment"># 方式1</span></span><br><span class="line"></span><br><span class="line">fread = open(file, <span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">config.read_file(<span class="string">'[fake]\n'</span> + fread.read())	<span class="comment"># 方式2</span></span><br><span class="line"></span><br><span class="line">config.read_string(<span class="string">'[fake]\n'</span> + fread.read()) <span class="comment"># 方式3</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(config.sections())</span><br><span class="line">print(config.options(<span class="string">'section_name'</span>))</span><br><span class="line">print(config.items(<span class="string">'section_name'</span>))  <span class="comment"># option 键值元组)</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h5 id="bunch库"><a href="#bunch库" class="headerlink" title="bunch库"></a>bunch库</h5><blockquote>
+<p>Bunch is a dictionary that supports attribute-style access, a la JavaScript.<br>Bunch库是一个支持属性方式获取值的字典，就像JavaScript。</p>
+</blockquote>
+<p>从源码来看<code>class Bunch(dict):</code> 显然是字典的子类。此外这个库还支持序列化转换成json格式</p>
+<p>但是这个库已经没有人维护，仅仅比较友好的支持到python3.2</p>
+<p>因此修改了部分源码使其更好的支持python3.6，主要体现在</p>
+<ul>
+<li><code>dict</code>的方法<code>dict.keys()</code>,<code>dict.items()</code>,<code>dict.values()</code>不会再返回列表,而是返回一个易读的“views”。这样一来，像这样的语法将不再有用了:<code>k = d.keys();k.sort()</code>,你可以使用<code>k = sorted(d)</code>来代替。<code>sorted(d)</code>在Python2.5及以后的版本中也有用，但是Python3效率更高了。</li>
+<li>目前自己电脑上用的就是修改后支持python3.6的</li>
+</ul>
+<p>转换 Dict-&gt;Bunch-&gt;Dice/json/yaml</p>
+<p><strong>注意，使用argparse.Namespace也可以实现：</strong>但是不支持字典的方式<code>arg.fix[&#39;x&#39;]</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arg = argparse.Namespace(num=<span class="number">10</span>, fix=argparse.Namespace(x=<span class="number">2</span>, y=<span class="number">10</span>))</span><br><span class="line">print(arg.fix.x)</span><br></pre></td></tr></table></figure>
+
+<p><span style="color:red">TODO： 有待研究</span></p>
+<h5 id="Chilkat-库"><a href="#Chilkat-库" class="headerlink" title="Chilkat 库"></a>Chilkat 库</h5><p>是一个综合性的库，好像很牛X。有待了解….</p>
+<h5 id="tqdm-进度条工具库"><a href="#tqdm-进度条工具库" class="headerlink" title="tqdm: 进度条工具库"></a>tqdm: 进度条工具库</h5><blockquote>
+<p><code>tqdm</code> means “progress” in Arabic (taqadum, تقدّم) and is an abbreviation for “I love you so much” in Spanish (te quiero demasiado).</p>
+<p>tqdm（读音：taqadum, تقدّم）在阿拉伯语中的意思是进展。tqdm可以在长循环中添加一个进度提示信息，用户只需要封装任意的迭代器 tqdm(iterator)，是一个快速、扩展性强的进度条工具库示例。</p>
+</blockquote>
+<p><strong>安装</strong>：  <code>pip install tqdm</code></p>
+<p><strong>示例</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tqdm(range(<span class="number">100</span>)):</span><br><span class="line">    sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>github官网示例：<a href="https://raw.githubusercontent.com/tqdm/tqdm/master/images/tqdm.gif" target="_blank" rel="noopener">https://raw.githubusercontent.com/tqdm/tqdm/master/images/tqdm.gif</a></p>
+<h5 id="networkx-库"><a href="#networkx-库" class="headerlink" title="networkx 库"></a>networkx 库</h5><blockquote>
+<p>NetworkX是一个用Python语言开发的图论与复杂网络建模工具，内置了常用的图与复杂网络<strong>分析算法</strong>，可以方便的进行复杂网络数据分析、仿真建模等工作。networkx支持创建简单无向图、有向图和多重图（multigraph）；内置许多标准的图论算法，节点可为任意数据；支持任意的边值维度，功能丰富，简单易用。</p>
+</blockquote>
+<h5 id="tornado-库"><a href="#tornado-库" class="headerlink" title="tornado 库"></a>tornado 库</h5><blockquote>
+<p>tornado是一个轻量级的web框架，是一个用python写的web服务器，它有三个最大的特点（优势）速度、简单和可扩展性。可以生成本地服务，监听一个端口提供响应。例如visdom就是使用这个框架完成的。</p>
+</blockquote>
+<h5 id="python-web服务器框架"><a href="#python-web服务器框架" class="headerlink" title="python web服务器框架"></a>python web服务器框架</h5><ul>
+<li>Tornado : <a href="http://www.tornadoweb.org/en/stable/" target="_blank" rel="noopener">http://www.tornadoweb.org/en/stable/</a></li>
+<li></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/30/pytorch%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="Pytorch学习笔记">
+                <i class="fa fa-chevron-left"></i> Pytorch学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/09/python%E5%B8%B8%E7%94%A8%E5%BA%93%E4%B9%8BNumpy/" rel="prev" title="python常用库之Numpy">
+                python常用库之Numpy <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">achange</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#gettext-模块"><span class="nav-number">1.</span> <span class="nav-text">gettext 模块</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#configparser-内置库用法"><span class="nav-number">2.</span> <span class="nav-text">configparser 内置库用法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#bunch库"><span class="nav-number">3.</span> <span class="nav-text">bunch库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Chilkat-库"><span class="nav-number">4.</span> <span class="nav-text">Chilkat 库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tqdm-进度条工具库"><span class="nav-number">5.</span> <span class="nav-text">tqdm: 进度条工具库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#networkx-库"><span class="nav-number">6.</span> <span class="nav-text">networkx 库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tornado-库"><span class="nav-number">7.</span> <span class="nav-text">tornado 库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#python-web服务器框架"><span class="nav-number">8.</span> <span class="nav-text">python web服务器框架</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">achange</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

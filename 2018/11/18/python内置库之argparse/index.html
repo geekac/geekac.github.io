@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="argparse 内置库详解本文基于python3.6版本，参考自官方文档，链接如下： Argparse Tutorial by Tshepang Lekhonkhobe argparse — Parser for command-line options, arguments and sub-commands 主要是对官方文档的翻译、理解、总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python内置库之argparse">
+<meta property="og:url" content="https://geekac.github.io/2018/11/18/python%E5%86%85%E7%BD%AE%E5%BA%93%E4%B9%8Bargparse/index.html">
+<meta property="og:site_name" content="Achange&#39;s home">
+<meta property="og:description" content="argparse 内置库详解本文基于python3.6版本，参考自官方文档，链接如下： Argparse Tutorial by Tshepang Lekhonkhobe argparse — Parser for command-line options, arguments and sub-commands 主要是对官方文档的翻译、理解、总结。">
+<meta property="article:published_time" content="2018-11-18T03:07:40.000Z">
+<meta property="article:modified_time" content="2018-12-29T10:58:24.118Z">
+<meta property="article:author" content="achange">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://geekac.github.io/2018/11/18/python内置库之argparse/"/>
+
+
+
+
+
+  <title>python内置库之argparse | Achange's home</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Achange's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I think, therefore i am.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://geekac.github.io/2018/11/18/python%E5%86%85%E7%BD%AE%E5%BA%93%E4%B9%8Bargparse/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="achange">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Achange's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python内置库之argparse</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-18T11:07:40+08:00">
+                2018-11-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Python%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">Python编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="argparse-内置库详解"><a href="#argparse-内置库详解" class="headerlink" title="argparse 内置库详解"></a>argparse 内置库详解</h2><p>本文基于python3.6版本，参考自官方文档，链接如下：</p>
+<p><a href="https://docs.python.org/3.6/howto/argparse.html#id1" target="_blank" rel="noopener">Argparse Tutorial by Tshepang Lekhonkhobe</a></p>
+<p><a href="https://docs.python.org/3.6/library/argparse.html#argumentparser-objects" target="_blank" rel="noopener">argparse — Parser for command-line options, arguments and sub-commands</a></p>
+<p>主要是对官方文档的翻译、理解、总结。</p>
+<a id="more"></a>
+
+
+
+<p>[TOC]</p>
+<h3 id="该模块简单介绍"><a href="#该模块简单介绍" class="headerlink" title="该模块简单介绍"></a>该模块简单介绍</h3><p>这个模块的作用是在命令行使用<code>python xx.py</code>运行脚本时，接收参数进行交互。<br>相比使用<code>sys.argv</code>，更有利于编写用户友好的命令行接口。</p>
+<p>相同的功能的库还有getopt(C语言中getopt()的等价物) 和optparse(不推荐使用)。</p>
+<br>
+
+<p><strong>这个模块是怎么实现的</strong>：通过设置add_argument的参数，解析sys.argv的列表。PS：这个库是基于optparse的。验证如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># filename: prog.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line">sys.argv.append(<span class="string">"-echo"</span>)</span><br><span class="line">sys.argv.append(<span class="string">"hello world"</span>)</span><br><span class="line">print(sys.argv)</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">"-echo"</span>, required=<span class="literal">True</span>, help=<span class="string">"echo the string you use here"</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args.echo)</span><br><span class="line"></span><br><span class="line"><span class="string">"""直接运行这些代码，将会输出：（第一个是代码文件路径，可能有所不同）</span></span><br><span class="line"><span class="string">['D:/Code/prog.py', '-echo', 'hello world']</span></span><br><span class="line"><span class="string">hello world</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+<p>直接运行，是指在命令行执行<code>D:\Code\&gt; python prog.py</code>，或者在IDE中使用快捷键运行这个脚本文件。</p>
+<p>可以看见<code>python prog.py</code>后没有跟参数，而第二行就显示了echo的值是hello world。<br></p>
+<p><span style="color:red">显然接收的参数默认都是字符串类型的！</span></p>
+<p>这个模块可以自动生成help (–help/-h)选项，用来向用户展示怎么在命令行添加运行脚本时的参数。</p>
+<h3 id="快速使用该模块"><a href="#快速使用该模块" class="headerlink" title="快速使用该模块"></a>快速使用该模块</h3><ol>
+<li><p>创建一个argparse.ArgumentParser()对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parser = argparse.ArgumentParser(description=<span class="string">'Process some information.'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">parser.add_argument(<span class="string">'--name'</span>, help=<span class="string">"What's your name?"</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--age'</span>, type=int, help=<span class="string">"How old are you?"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>传递、解析参数</p>
+<p>向解析器parser传递指定参数的值。可以通过直接使用列表(<code>type(sys.argv)==&lt;class &#39;list&#39;&gt;</code>传递，也可以使用命令行传递。使用字符串传递的方式可以在<strong>REPL</strong>模式下测试该模块的用法。</p>
+<p>调用<code>args = parser.parse_args()</code>这个函数会解析参数，并将参数绑定到args上。实际上这个函数返回的是一个<span style="color:red">argprase.Namespace()对象实例</span>。</p>
+<p>【备注】 REPL即read、eva、print、loop（读取、计算、打印、循环）。可以在dos窗口键入python或者直接运行python.exe进入该模式。</p>
+<p><strong>3.1</strong> <strong>REPL模式下使用列表</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">arguments = [<span class="string">'--name'</span>, <span class="string">'jack'</span>, <span class="string">'--age'</span>, <span class="string">'18'</span>]</span><br><span class="line">args = parser.parse_args(arguments)</span><br><span class="line">print(args)</span><br><span class="line"><span class="comment"># output: Namespace(age=18, name='jack')</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3.2</strong> <strong>命令行方式</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br></pre></td></tr></table></figure>
+
+<p>假设以上代码保存在prog.py文件中。在命令行执行<code>python prog.py --name jack --age 18</code>得到相同的结果<code>Namespace(age=18, name=&#39;jack&#39;)</code></p>
+</li>
+<li><p>使用参数值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(args.name, args.age)</span><br><span class="line"><span class="comment"># output: jack 18</span></span><br></pre></td></tr></table></figure>
+
+<p><span style="color:red">深入理解：</span>之所以可以通过”<strong>.</strong>“运算符(在C++等语言中称为<span style="background:#DAE3E9;">成员访问运算符</span>)，是因为parser.parse_args()函数返回的是一个argparse.Namespace()的实例化对象，name和age是这个对象的属性。在解析参数的时候，也就是相当于通过调用内置函数<code>setattr(object, name, value)</code> 给argparse.Namespace()的实例化对象绑定新的属性和值。</p>
+</li>
+</ol>
+<h3 id="argparse-ArgumentParser-实例化参数"><a href="#argparse-ArgumentParser-实例化参数" class="headerlink" title="argparse.ArgumentParser()实例化参数"></a>argparse.ArgumentParser()实例化参数</h3><h4 id="多个argparse-ArgumentParser-实例化对象"><a href="#多个argparse-ArgumentParser-实例化对象" class="headerlink" title="多个argparse.ArgumentParser()实例化对象"></a>多个argparse.ArgumentParser()实例化对象</h4><p>在<code>parser = argparse.ArgumentParser</code>的时，需要注意的是：<span style="color:red">在同一个脚本文件中，无论实例化多少个argparse.ArgumentParser()对象，这些对象都只能解析的同一个sys.argv的列表！</span></p>
+<p>使用多个argparse.ArgumentParser()对象的方法：</p>
+<ul>
+<li><p>跨脚本文件使用同一个argparse.ArgumentParser()对象参考代码：<a href="https://github.com/achanger/pytorch-CycleGAN-and-pix2pix/tree/master/options" target="_blank" rel="noopener">using-a-parser-in-manyfiles</a></p>
+</li>
+<li><p>使用parents参数使得多个argparse.ArgumentParser()对象同时起作用：</p>
+<p> 需要注意的是共享的parent_parser在实例化的时候,，添加参数add_help=False 否则可能会打印多次help信息。可以跨脚本文件共享<code>parent_parser</code>！！(比<span style="color:#4183C4">using-a-parser-in-manyfiles</span>这种方式更简便些)</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parent_parser = argparse.ArgumentParser(add_help=<span class="literal">False</span>)</span><br><span class="line">parent_parser.add_argument(<span class="string">'--parent'</span>, type=int)</span><br><span class="line">foo_parser = argparse.ArgumentParser(parents=[parent_parser], </span><br><span class="line">                                     description=<span class="string">'Process some integers.'</span>)</span><br><span class="line">foo_parser.add_argument(<span class="string">'foo'</span>)</span><br><span class="line">foo_parser.parse_args([<span class="string">'--parent'</span>, <span class="string">'2'</span>, <span class="string">'XXX'</span>])	</span><br><span class="line"><span class="comment"># Namespace(foo='XXX', parent=2)</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>以及后面还有介绍一种向parser添加<strong>分组Group</strong>的方式。</p>
+<br/>
+
+</li>
+</ul>
+<h4 id="argparse-ArgumentParser-实例化参数详解"><a href="#argparse-ArgumentParser-实例化参数详解" class="headerlink" title="argparse.ArgumentParser()实例化参数详解"></a><strong>argparse.ArgumentParser()实例化参数详解</strong></h4><p>实例化对象时，传递的参数主要影响的是打印help信息、以及传参方式等。先基于以下代码讲解其参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fileName: prog.py</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">'Process some information.'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--name'</span>, help=<span class="string">"What's your name?"</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--age'</span>, type=int, help=<span class="string">"How old are you?"</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line"><span class="string">"""在命令行执行`python prog.py -h`, 得到如下输出：</span></span><br><span class="line"><span class="string">usage: prog.py [-h] [--name NAME] [--age AGE]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Process some information.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">optional arguments:</span></span><br><span class="line"><span class="string">  -h, --help   show this help message and exit</span></span><br><span class="line"><span class="string">  --name NAME  What's your name?</span></span><br><span class="line"><span class="string">  --age AGE    How old are you?</span></span><br><span class="line"><span class="string">  </span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<ul>
+<li><p><span style="color:blue">add_help</span>  —  不显示<code>optional arguments:</code>下<code>-h, --help   show this help message and exit</code>这一行。通常设置<code>parent_parser = argparse.ArgumentParser(add_help=False)</code></p>
+</li>
+<li><p><span style="color:blue">prog</span>   —  该参数默认是当前脚本文件的名称，也就是<code>sys.argv[0]</code>。也就是例子中的”prog.py”。</p>
+</li>
+<li><p><span style="color:blue">usage</span>  —  该参数指定的是打印help信息中，<code>usage:</code>后面的信息。</p>
+</li>
+<li><p><span style="color:blue">description</span>  —  打印help信息中的 描述信息。告诉使用者这个接收参数脚本是干嘛的。</p>
+</li>
+<li><p><span style="color:blue">epilog</span>  —  [鸡肋参数]该参数的值将在打印参数描述信息之后  打印出来。</p>
+</li>
+<li><p><span style="color:blue">parents</span>  —  定义可以被其他parser共享的parent_parser，将不同脚本中都使用的参数放在一个parent_parser中，可以避免重复定义。上面已涉及。</p>
+</li>
+<li><p><span style="color:blue">formatter_class</span>  —  指定格式化输出帮助信息。默认参数是argparse.HelpFormatter，可选的参数是argparse.RawDescriptionHelpFormatter、argparse.RawTextHelpFormatter、argparse.ArgumentDefaultsHelpFormatter、argparse.MetavarTypeHelpFormatter</p>
+</li>
+<li><p><span style="color:blue">prefix_chars</span>  —  修改参数的前缀，默认值是”-“(字符串)。前缀可以是这个字符串中的任意字符。注意，在传递要解析的列表时，要和add_argument()中对应一致。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser(prefix_chars=<span class="string">'-+'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'-x'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--y'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'+a'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'++b'</span>)</span><br><span class="line">args = parser.parse_args([<span class="string">'-x'</span>, <span class="string">'10'</span>, <span class="string">'--y'</span>, <span class="string">'20'</span>, <span class="string">'+a'</span>, <span class="string">'aa'</span>, <span class="string">'++b'</span>, <span class="string">'bb'</span>])</span><br><span class="line">print(args)</span><br><span class="line"><span class="comment"># 或者在命令行使用：`python prog.py -x 10 --y 20 +a aa +b bb`</span></span><br><span class="line"><span class="comment"># output: Namespace(a='aa', b='bb', x='10', y='20')</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><span style="color:blue">fromfile_prefix_chars</span>  —  标识该参数从文件中读取。默认值是空，不从文件中读参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'args.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    fp.write(<span class="string">'-f\nbar'</span>)</span><br><span class="line">parser = argparse.ArgumentParser(fromfile_prefix_chars=<span class="string">'@'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'-f'</span>)</span><br><span class="line">parser.parse_args([<span class="string">'-f'</span>, <span class="string">'foo'</span>, <span class="string">'@args.txt'</span>]) <span class="comment">#从args.txt文件中读取参数</span></span><br></pre></td></tr></table></figure>
+
+<p>【注意】文件的格式：–参数名和参数的值 分开各占一行</p>
+<p>【注意】<span style="color:red">后面的重名参数会覆盖前面参数的值</span>。其实就是argparse.Namespace()对象重新setattr()，不检查是否已经有该属性。<code>python xx.py -f foo -f bar</code>则<code>parser.f = bar</code>而不是<code>foo</code>。</p>
+</li>
+<li><p><span style="color:blue">argument_default</span>  —  参数缺省值。一般可以通过add_argument()函数的<code>default=&#39;jack&#39;</code>参数或者使用<code>parser.set_defaults(name=&#39;jack&#39;)</code>来指定默认值。这个参数的默认是None，可以指定为</p>
+<ul>
+<li><code>argparse.SUPPRESS</code>：意味着不给参数指定值，parser就没有该属性，当然获取值的时候就会报错。</li>
+<li><code>任意其他的字符串、数值、列表等</code>：<span style="color:red">所有参数的默认值，</span>可能会存在类型不一致的问题，不推荐使用。</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser(prefix_chars=<span class="string">'-+'</span>, argument_default=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">parser.add_argument(<span class="string">'--name'</span>, help=<span class="string">"What's your name?"</span>)</span><br><span class="line">parser.add_argument(<span class="string">'++nums'</span>, type=list, help=<span class="string">"nums..."</span>) <span class="comment">#注意type=list</span></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line"><span class="string">"""执行：`python prog.py --name jack`</span></span><br><span class="line"><span class="string">Output: Namespace(name='jack', nums=[1, 2, 3])</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><span style="color:blue">allow_abbrev</span>  —  是否允许缩写参数名，默认为<code>True</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">parser.add_argument(<span class="string">'--foonley'</span>, action=<span class="string">'store_false'</span>)</span><br><span class="line"><span class="comment"># 默认为True的时候，可以使用缩写`python xxx.py --foon`来传递值</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><span style="color:blue">conflict_handler</span>  —  默认情况下，<strong>禁止重复add_argument同一参数名，引起冲突</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser(prefix_chars=<span class="string">'-+'</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--name'</span>, help=<span class="string">"What's your name?"</span>)</span><br><span class="line">parser.add_argument(<span class="string">'--name'</span>, help=<span class="string">"What's your name?"</span>)</span><br><span class="line"><span class="comment"># argparse.ArgumentError: argument --name: conflicting option string: --name</span></span><br></pre></td></tr></table></figure>
+
+<p>conflict_handler 的默认值是报错’error’，可以指定为<code>conflict_handler=&#39;resolve&#39;</code>使得不报错，而是后面的值对前面的值进行<span style="color:red">覆盖</span>。</p>
+</li>
+</ul>
+<h3 id="parser-add-argument-函数详解"><a href="#parser-add-argument-函数详解" class="headerlink" title="parser.add_argument()函数详解"></a>parser.add_argument()函数详解</h3><p>Ⅰ  参数的类型：</p>
+<ul>
+<li><p>位置参数(必选参数)</p>
+<p>parser.add_argument()的第一个参数，而且<strong>不</strong>是以 “<strong>-</strong>“ /“<strong>–</strong>“开头的，就是位置参数。在命令行运行时，必须制定该参数的值。这种情况下，后面不可以跟<span style="color:red">required</span>参数。</p>
+</li>
+<li><p>可选参数</p>
+<p>参数是以 “<strong>–</strong>“ 或者 “<strong>-</strong>“ 开头的。后面可以跟<span style="color:red">required</span>参数来决定用户是否必须在命令行提供这个参数及其值。可以使用<span style="color:red">default</span>参数，为其指定默认值。</p>
+</li>
+<li><p><strong>特殊情况–标记(action)</strong></p>
+<p>位置参数和可选参数后面都可以跟<code>action=&quot;store_false/true/...&quot;</code>，<code>action≠store</code>的时候就改变了这个参数的属性，变成了一个标记，而不是用于接收值的变量！</p>
+<p><span style="color:red"><strong>别记混！</strong></span>成为标记之后，参数后面<strong>有这个标记</strong>就<strong>激活</strong>action！否则不激活action，其值为激活下的相反情况。</p>
+<p>【笔记】有action参数的时候，该参数成为一个<span style="color:red">标记</span>。</p>
+</li>
+<li><p><strong>参数简写</strong></p>
+<p>当在调用parser.add_argument()增加参数时候，以 “<strong>–</strong>“ 或者 “<strong>-</strong>“ 开头的参数同时出现在参数列表中，”<strong>-</strong>“ 开头的是简化命令。当二者同时出现时的异同点：</p>
+<ol>
+<li>“<strong>-</strong>参数名(简写版)” 和 “<strong>–</strong>参数名(复杂版)” 在命令行都可以接收参数</li>
+<li>在解析<code>args = parser.parse_args()</code>之后，只能通过<code>args.参数名(复杂版)</code>来获取其值。</li>
+</ol>
+<p>二者不同时出现的时候，作用相同！</p>
+<br/>
+
+
+</li>
+</ul>
+<p>Ⅱ  限定参数的值域范围</p>
+<p>使用<strong>choices</strong>参数限定范围：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">"square"</span>, type=int,</span><br><span class="line">                    help=<span class="string">"display a square of a given number"</span>)</span><br><span class="line">parser.add_argument(<span class="string">"-v"</span>, <span class="string">"--verbosity"</span>, type=int, choices=[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">                    help=<span class="string">"increase output verbosity"</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line">answer = args.square**<span class="number">2</span></span><br><span class="line"><span class="keyword">if</span> args.verbosity == <span class="number">2</span>:</span><br><span class="line">    print(<span class="string">"the square of &#123;&#125; equals &#123;&#125;"</span>.format(args.square, answer))</span><br><span class="line"><span class="keyword">elif</span> args.verbosity == <span class="number">1</span>:</span><br><span class="line">    print(<span class="string">"&#123;&#125;^2 == &#123;&#125;"</span>.format(args.square, answer))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(answer)</span><br><span class="line"><span class="string">"""Results:</span></span><br><span class="line"><span class="string">&gt; python3 prog.py 4 -v 3</span></span><br><span class="line"><span class="string">usage: prog.py [-h] [-v &#123;0,1,2&#125;] square</span></span><br><span class="line"><span class="string">prog.py: error: argument -v/--verbosity: invalid choice: 3 (choose from 0, 1, 2)</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+<p>Ⅲ   对于标记，参数action详解</p>
+<ol>
+<li><p>默认值<code>action=&#39;store&#39;</code>， 表示仅存储变量的值。只要不等于store，就变成了标记！！出现–标记，则可以访问这个属性，否则就是None。下一条<code>action = store_const</code>将验证之。</p>
+</li>
+<li><p>action = store_const，表示存储为const关键字指定的值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'--num'</span>, action=<span class="string">'store_const'</span>, const=<span class="number">18</span>)</span><br><span class="line">print(parser.parse_args([<span class="string">'--foo'</span>]))	<span class="comment">#[case1]  # Namespace(num=18)</span></span><br><span class="line">print(parser.parse_args([]))		<span class="comment">#[case2]  # Namespace(num=None)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果运行这个脚本,注释掉掉[case1]、[case2]，并修改如下：</span></span><br><span class="line">print(parser.parse_args())</span><br><span class="line"><span class="comment"># 运行`python prog.py --num`    Output: 18</span></span><br><span class="line"><span class="comment"># 运行`python prog.py`   		  Output: None</span></span><br><span class="line"><span class="comment"># 运行`python prog.py --num 20`</span></span><br><span class="line"><span class="string">"""Output: 此时就报错了，action='store_const'，--num是个标记，有这个标记就赋值18没有就是None</span></span><br><span class="line"><span class="string">usage: prog.py [-h] [--num]</span></span><br><span class="line"><span class="string">prog.py: error: unrecognized arguments: 20</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>action=’count’</p>
+<p>参数(标记)的值 = 标记在命令行出现的次数。对于简写的参数，可以这样用：-vvvvv</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">"square"</span>, type=int,</span><br><span class="line">                    help=<span class="string">"display the square of a given number"</span>)</span><br><span class="line">parser.add_argument(<span class="string">"-v"</span>, <span class="string">"--verbosity"</span>, action=<span class="string">"count"</span>,</span><br><span class="line">                    help=<span class="string">"increase output verbosity"</span>)</span><br><span class="line">args = parser.parse_args()</span><br><span class="line">answer = args.square**<span class="number">2</span></span><br><span class="line"><span class="keyword">if</span> args.verbosity == <span class="number">2</span>:</span><br><span class="line">    print(<span class="string">"the square of &#123;&#125; equals &#123;&#125;"</span>.format(args.square, answer))</span><br><span class="line"><span class="keyword">elif</span> args.verbosity == <span class="number">1</span>:</span><br><span class="line">    print(<span class="string">"&#123;&#125;^2 == &#123;&#125;"</span>.format(args.square, answer))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(answer)</span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">python3 prog.py 4 -vv</span></span><br><span class="line"><span class="string">python3 prog.py 4 --verbosity --verbosity</span></span><br><span class="line"><span class="string">output: the square of 4 equals 16</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ol>
+<p>Ⅳ  互斥参数(mutually exclusive)与可组内共存参数</p>
+<p>互斥参数适用于两个或多个参数在命令行中不能同时出现的情况。<strong>使用组(group)来管理</strong>：</p>
+<ul>
+<li>add_mutually_exclusive_group()函数。组内的参数不能同时出现在命令行。</li>
+<li>parser.add_argument_group()分组管理可以共存的参数。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line">parser = argparse.ArgumentParser(description=<span class="string">"calculate X to the power of Y"</span>)</span><br><span class="line"></span><br><span class="line">group_conflict = parser.add_mutually_exclusive_group()</span><br><span class="line">group_conflict.add_argument(<span class="string">"-v"</span>, <span class="string">"--verbose"</span>, action=<span class="string">"store_true"</span>)</span><br><span class="line">group_conflict.add_argument(<span class="string">"-q"</span>, <span class="string">"--quiet"</span>, action=<span class="string">"store_true"</span>)</span><br><span class="line"></span><br><span class="line">group = parser.add_argument_group()</span><br><span class="line">group.add_argument(<span class="string">"x"</span>, type=int, help=<span class="string">"the base"</span>)</span><br><span class="line">group.add_argument(<span class="string">"y"</span>, type=int, help=<span class="string">"the exponent"</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">answer = args.x**args.y</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> args.quiet:</span><br><span class="line">    print(answer)</span><br><span class="line"><span class="keyword">elif</span> args.verbose:</span><br><span class="line">    print(<span class="string">"&#123;&#125; to the power &#123;&#125; equals &#123;&#125;"</span>.format(args.x, args.y, answer))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">"&#123;&#125;^&#123;&#125; == &#123;&#125;"</span>.format(args.x, args.y, answer))</span><br><span class="line">    </span><br><span class="line"><span class="comment"># RESULTS:</span></span><br><span class="line"><span class="comment"># Command: python3 prog.py 4 2 -vq</span></span><br><span class="line"><span class="comment"># OUTPUT:</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">usage: prog.py [-h] [-v | -q] x y</span></span><br><span class="line"><span class="string">prog.py: error: argument -q/--quiet: not allowed with argument -v/--verbose</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Command： python3 prog.py 4 2 -v</span></span><br><span class="line"><span class="comment"># OUTPUT:4 to the power 2 equals 16</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Command： python3 prog.py 4 2 -q</span></span><br><span class="line"><span class="comment"># OUTPUT:16</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>暂时不解析了，封装好的argparse直接用。</p>
+<p>但是这个笔记需要将继续写完。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/16/Python%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%86%85%E5%AE%B9%E8%BD%AC%E6%8D%A2%E6%88%90%E5%AF%B9%E5%BA%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="next" title="Python字符串的内容转换成对应数据类型">
+                <i class="fa fa-chevron-left"></i> Python字符串的内容转换成对应数据类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/10/Go%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-vscode%E5%92%8CGoland/" rel="prev" title="Go语言开发环境搭建(vscode和Goland)">
+                Go语言开发环境搭建(vscode和Goland) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">achange</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#argparse-内置库详解"><span class="nav-number">1.</span> <span class="nav-text">argparse 内置库详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#该模块简单介绍"><span class="nav-number">1.1.</span> <span class="nav-text">该模块简单介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快速使用该模块"><span class="nav-number">1.2.</span> <span class="nav-text">快速使用该模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#argparse-ArgumentParser-实例化参数"><span class="nav-number">1.3.</span> <span class="nav-text">argparse.ArgumentParser()实例化参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#多个argparse-ArgumentParser-实例化对象"><span class="nav-number">1.3.1.</span> <span class="nav-text">多个argparse.ArgumentParser()实例化对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#argparse-ArgumentParser-实例化参数详解"><span class="nav-number">1.3.2.</span> <span class="nav-text">argparse.ArgumentParser()实例化参数详解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parser-add-argument-函数详解"><span class="nav-number">1.4.</span> <span class="nav-text">parser.add_argument()函数详解</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">achange</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

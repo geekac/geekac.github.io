@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="开始：我所理解的Java到底是解释型语言还是编译型语言原文链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;gaosure&#x2F;article&#x2F;details&#x2F;58252393 &lt;———————– 关于Java到底是解释型语言还是编译型语言还是二者的集合？首先理解一下何为解释型语言和编译型语言 计算机高级语言类型主要有编译型和解释型两种： 编译型语言：在程序运行之前，有一个单独的编译过程，将程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java学习笔记">
+<meta property="og:url" content="https://geekac.github.io/2018/09/20/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Achange&#39;s home">
+<meta property="og:description" content="开始：我所理解的Java到底是解释型语言还是编译型语言原文链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;gaosure&#x2F;article&#x2F;details&#x2F;58252393 &lt;———————– 关于Java到底是解释型语言还是编译型语言还是二者的集合？首先理解一下何为解释型语言和编译型语言 计算机高级语言类型主要有编译型和解释型两种： 编译型语言：在程序运行之前，有一个单独的编译过程，将程序">
+<meta property="og:image" content="d:%5C0sysWin10Users%5CPictures%5Cuserful%5Cjava_exec_process.jpg">
+<meta property="og:image" content="d:%5C0sysWin10Users%5CPictures%5Cuserful%5Cjava_exec_process2.jpg">
+<meta property="article:published_time" content="2018-09-20T08:47:20.000Z">
+<meta property="article:modified_time" content="2018-11-08T03:20:14.480Z">
+<meta property="article:author" content="achange">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:%5C0sysWin10Users%5CPictures%5Cuserful%5Cjava_exec_process.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://geekac.github.io/2018/09/20/Java学习笔记/"/>
+
+
+
+
+
+  <title>Java学习笔记 | Achange's home</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Achange's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I think, therefore i am.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://geekac.github.io/2018/09/20/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="achange">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Achange's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-20T16:47:20+08:00">
+                2018-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">Java编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="开始：我所理解的Java到底是解释型语言还是编译型语言"><a href="#开始：我所理解的Java到底是解释型语言还是编译型语言" class="headerlink" title="开始：我所理解的Java到底是解释型语言还是编译型语言"></a>开始：我所理解的Java到底是解释型语言还是编译型语言</h4><p>原文链接：<a href="https://blog.csdn.net/gaosure/article/details/58252393" target="_blank" rel="noopener">https://blog.csdn.net/gaosure/article/details/58252393</a></p>
+<p>&lt;———————–</p>
+<p>关于Java到底是解释型语言还是编译型语言还是二者的集合？首先理解一下何为解释型语言和编译型语言</p>
+<p>计算机高级语言类型主要有编译型和解释型两种：</p>
+<p>编译型语言：在程序运行之前，有一个单独的编译过程，将程序翻译成机器语言，以后执行这个程序时，就不用再进行翻译了。</p>
+<p>解释型语言：是在运行的时候将程序翻译成机器语言，所以运行速度相对于编译型语言要慢。</p>
+<p>SO，二者之间最大的区别就在于是否存下目标机器码：编译会把输入的源程序以某种单位(例如基本块/函数/方法/trace等)翻译生成目标机器码，并存下来(无论是在磁盘上或是内存中)后续执行可以复用；解释则是把源程序中的指令逐条解释执行，边解释边执行，不存下目标代码，后续执行没有可以复用的信息。</p>
+<p>了解Java的运行过程：Java源文件(*.java)，通过java编译器(javac)编译生成一个ByteCode字节码文件(*.class)，字节码由java自己设计的一个计算机(即java虚拟机，JVM)解释执行，虚拟机将每一条要执行的字节码送给解释器，解释器将其翻译成特定机器上的目标机器码，然后在特定的机器上运行。</p>
+<p>所以说Java的解释器的优点是比较容易让用户实现自己跨平台的代码，同一套代码可以在几乎所有的操作系统上执行。</p>
+<p>（这里提一下java的跨平台Write Once，Run Anywhere：java的跨平台是基于JVM的。JVM是在一台计算机上由软件或是硬件模拟的计算机，java程序所有的*.class文件都是在JVM上运行的，也就是说*.class文件只需认JVM，由JVM去适应各个操作系统，所以不同的操作系统只要安装符合其类型的JVM，那么程序无论到哪个OS上都是可以正确执行的JVM for Unix / JVM for Windows / JVM for Other……，因此没有JVM也就不能跨平台）</p>
+<p>虽然Java的第一道工序是javac编译，其目标文件是ByteCode，而并非机器语言，但后续可能有三种处理方式：   </p>
+<p>1、运行时，ByteCode由JVM逐条送给解释器，解释器将翻译成机器码运行。</p>
+<p>2、运行时，部分ByteCode可能由实时编译器（Just In Time Compiler，JIT）编译为目标机器码再执行(以method为翻译单位，还会保存起来，第二次执行就不用再翻译为机器码了)，因为考虑到有些JVM是采用纯JIT编译方式实现的，其内部没有解释器，例如：JRockit、Maxine VM。</p>
+<p>3、RTSJ，继javac之后执行AOT二次编译，生成静态的目标平台码。</p>
+<p>有的时候，可能是以上三种方式同时在使用，至少，1和2是同时使用的，3则需要程序员手工指定。</p>
+<p>SO，我认为java是编译与解释两者之间的混合式语言。</p>
+<p>And，一个知乎的大牛说的特别有道理：</p>
+<p>很多资料说，C/C++等是编译型语言，而Java、C#、Python、JavaScript都是解释型语言，是通过解释器来实现的，其实这么说很容易引起误解：语言一般只会定义其抽象语义，而不会强制性要求采用某种实现方式，例如说C一般被认为是编译型语言，但C的解释器也是存在的，例如Ch……所以一般被称为“解释型语言”的是主流实现方式为解释器的语言，但并不是说它就无法编译。</p>
+<hr>
+<h4 id="java是编译型的还是解释型的"><a href="#java是编译型的还是解释型的" class="headerlink" title="java是编译型的还是解释型的"></a>java是编译型的还是解释型的</h4><p>原文链接：<a href="https://www.cnblogs.com/zjushuiping/archive/2013/01/06/2848478.html" target="_blank" rel="noopener">https://www.cnblogs.com/zjushuiping/archive/2013/01/06/2848478.html</a></p>
+<p>&lt;———————–</p>
+<p>注：本文是转载而来。</p>
+<p>Java这个语言很非凡。<br>一、你可以说它是编译型的。因为所有的Java代码都是要编译的，.java不经过编译就什么用都没有。<br>二、你可以说它是解释型的。因为java代码编译后不能直接运行，它是解释运行在JVM上的，所以它是解释运行的，那也就算是解释的了。<br>三、但是，现在的JVM为了效率，都有一些JIT优化。它又会把.class的二进制代码编译为本地的代码直接运行，所以，又是编译的。<br>像C、C++ 他们经过一次编译之后直接可以编译成操作系统了解的类型，可以直接执行的 所以他们是编译型的语言。没有经过第二次的处理 而Java不一样他首先由编译器编译成.class类型的文件，这个是java自己类型的文件 然后在通过虚拟机(JVM)从.class文件中读一行解释执行一行，所以他是解释型的语言，而由于java对于多种不同的操作系统有不同的JVM所以 Java实现了真正意义上的跨平台！<br>请观看下面两张图 了解一下Java的虚拟机机制：<br>(1)java语言的编译–&gt;解释—&gt;执行过程</p>
+<p><img src="D:%5C0sysWin10Users%5CPictures%5Cuserful%5Cjava_exec_process.jpg" alt=""></p>
+<p>(2)java的虚拟机 </p>
+<p><img src="D:%5C0sysWin10Users%5CPictures%5Cuserful%5Cjava_exec_process2.jpg" alt=""></p>
+<p>今天听到同事在讨论java是哪种类型的语言（编译型、解释型），以前稍微有些接触，但是概念比较模糊，为了不至于让别人的思想左右自己，所以查了些资料，找到了很多热心网友给出的答案，终于有些明白。这里先给出编译型语言和解释型语言的定义。<br>定义：<br>编译型语言：把做好的源程序全部编译成二进制代码的可运行程序。然后，可直接运行这个程序。<br>解释型语言：把做好的源程序翻译一句，然后执行一句，直至结束！<br>区别：<br>编译型语言，执行速度快、效率高；依靠编译器、跨平台性差些。<br>解释型语言，执行速度慢、效率低；依靠解释器、跨平台性好。<br>个人认为，java是解释型的语言，因为虽然java也需要编译，编译成.class文件，但是并不是机器可以识别的语言，而是字节码，最终还是需要 jvm的解释，才能在各个平台执行，这同时也是java跨平台的原因。所以可是说java即是编译型的，也是解释型，但是假如非要归类的话，从概念上的定义，恐怕java应该归到解释型的语言中。<br>附：<br>编译型的语言包括：C、C++、Delphi、Pascal、Fortran<br>解释型的语言包括：Java、Python、Basic、javascript</p>
+<hr>
+<h4 id="静态语言和动态语言"><a href="#静态语言和动态语言" class="headerlink" title="静态语言和动态语言"></a>静态语言和动态语言</h4><p>1.动态语言Dynamically Typed Language</p>
+<p>例如：ECMAScript(JavaScript)、Ruby、Python、VBScript、php</p>
+<p>也叫动态类型定义语言</p>
+<p>与静态类型定义相反，一种在执行期间才去发现数据类型的语言，</p>
+<p>动态语言是指程序在运行时可以改变其结构：新的函数可以被引进，已有的函数可以被删除等在结构上的变化。</p>
+<p>动态语言的类型检查是在运行时做的。</p>
+<p>它的优点是方便阅读，不需要写非常多的类型相关的代码；</p>
+<p>缺点是不方便调试，命名不规范时会造成读不懂，不利于理解等。</p>
+<p>目前java平台下的动态语言有Groovy、nice、BeanShell、Jython、JRuby、Rhino(JavaScript)、 Jacl(TCL)、Bistro(SmallTalk)、Kawa(Lisp/Schema)，真是越来越多了。java下这么多的动态语言建议选择 Groovy，感觉血统较为正宗，兼容Java的语法，java程序员学习起来较为容易，上手较快。</p>
+<p>2.静态语言Statically Typed Language</p>
+<p>例如：C、C++、Java</p>
+<p>也叫静态类型定义语言。即一种在编译时，数据类型是固定的语言。大多数静态类型定义语言强制这一点，它要求你在使用所有变量之前要声明它们的数据类型。</p>
+<p>在使用数据之前，我们必须首先定义数据类型，这些数据类型包括int ,float,double等等。就相当于在使用它们之前，首先要为它们分配好内存空间。</p>
+<p>静态类型语言的主要优点在于其结构非常规范，便于调试，方便类型安全；</p>
+<p>缺点是为此需要写更多的类型相关代码，导致不便于阅读、不清晰明了。</p>
+<p>3.强类型定义语言</p>
+<p>一种总是强制类型定义的语言。Java和Python是强制类型定义的。如果你有一个整数，如果不显示地进行转换，你不能将其视为一个字符串</p>
+<p>4.弱类型定义语言</p>
+<p>一种类型可以被忽略的语言，与强类型定义相反。VBScript是弱类型定义</p>
+<p>的。在VBScript中，可以将字符串 ’12′ 和整数 3 进行连接得到字符串 ’123′，</p>
+<p>然后可以把它看成整数 123，而不需要显示转换。</p>
+<p>5.脚本语言</p>
+<p>脚本语言代表一套与系统程序设计语言不同的协定。</p>
+<p>它们牺牲执行速度和与系统程序设计语言相关的类型长度而提供更高的编程创作力和软件重用。</p>
+<p>脚本语言更适合在联系复杂的应用程序中进行胶着。</p>
+<p>为了简化连接组件的工作,脚本语言被设计为无类型的，脚本语言一般是面向字符的，因为字符为许多不同的事物提供了一致的描述。</p>
+<p>事实上，脚本语言都是动态语言，而动态语言都是解释型语言，不管它们是不是面向对象。</p>
+<hr>
+<p>(1)  Java完全采用了动态内存分配方式。即分配在堆(heap)中、基本类型只是一种特例。</p>
+<p>​       在堆栈上申请的空间具有特定的类型、大小、生命周期。==&gt; 不灵活</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在堆上申请空间很灵活，带来的问题是何时销毁变量(生命周期问题)。Java提供了“垃圾回收器”机制。</span><br></pre></td></tr></table></figure>
+
+<p><strong>Java中一切皆对象，但基本类型却不是对象，为了解决这个问题，Java让每个基本类型都对应了一个包装器类型。</strong></p>
+<p>注意：对象引用存储在堆栈中。。。基本变量的值置于堆栈中。</p>
+<p>(1.other) 终止java程序：</p>
+<ul>
+<li><p>在代码中提前终止java运行：System.exit(0);</p>
+</li>
+<li><p>python：quit()   —-也可以使用sys库的：sys.exet(0)</p>
+</li>
+<li><p>C/C++：exit(0);</p>
+</li>
+</ul>
+<p>(2) 数值类型</p>
+<blockquote>
+<p>java所有数值类型都有正负号，没有无符号类型的数值类型。并且每种基本类型有指定的存储空间大小，不会随着机器而改变。</p>
+</blockquote>
+<p>基本类型占用的字节数：(8种基本数据类型)</p>
+<p>​    <code>byte占用1个字节；int占用4个字节；short占用2个字节；long占用8个字节；</code></p>
+<p>​    <code>char占用2个字节；float占用4个字节；double占用8个字节。</code></p>
+<p>—-Boolean类型存储空间没有指定大小！</p>
+<p>注意点：</p>
+<ul>
+<li><p>使用过长的整数(超过Int的范围)时，需要在整数尾部加上”L”或者”l”(小写的L)。</p>
+<p> java中所有的小数默认是double类型(末尾加”d”，一般省略)，如果存储在float变量中 需要在小数后加”f”</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> num  = <span class="number">12344442122110L</span>;<span class="comment">//Correct</span></span><br><span class="line"><span class="keyword">long</span> num_ = <span class="number">12344442122110</span>; <span class="comment">//Error</span></span><br><span class="line"><span class="keyword">float</span> fpi = <span class="number">3.4123f</span>;</span><br><span class="line"><span class="keyword">double</span> pi = <span class="number">3.141526</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>byte类型</p>
+<p> 占用一个字节。在C/C++中char类型占据一个字节，Java中char占据2个字节。</p>
+<p> 特别注意java的类型转换机制：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span> b  = <span class="number">10</span>;<span class="comment">//Correct. 10默认是int型，在类型的允许范围内 编译器自动对常量向下转化</span></span><br><span class="line"><span class="keyword">byte</span> b_ = <span class="number">128</span>;<span class="comment">//Error. 超出了byte的范围 int无法转化成byte类型</span></span><br><span class="line">b =  b + <span class="number">3</span>;<span class="comment">//Error. 3是int类型，b+3是int类型 无法赋值给byte。需要强制转换</span></span><br><span class="line">b = <span class="keyword">byte</span>(b + <span class="number">3</span>);<span class="comment">//Correct.</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&nbsp;</p>
+</li>
+</ul>
+<p>(3)  java运算符</p>
+<p>java  “+”操作符可以自动进行字符串转换</p>
+<p><code>定义字符串 String str = &quot;string&quot;;</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">System.out.println(<span class="string">"a = "</span> + a);</span><br></pre></td></tr></table></figure>
+
+<p>java的逻辑运算符</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* JAVA逻辑运算符： &amp;和&amp;&amp;  |和||  !    【 这点上的特性和C++相同  ！！！！ 】</span></span><br><span class="line"><span class="comment">      &amp;和&amp;&amp;  运算结果相同，区别是：</span></span><br><span class="line"><span class="comment">          &amp;：无论左边运算结果是什么 右边都参与运算</span></span><br><span class="line"><span class="comment">         &amp;&amp;：当左边为false时， 右边不参与运算  ==》 推荐使用</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">       |和||  运算结果相同，区别是：</span></span><br><span class="line"><span class="comment">           |：无论左边运算结果是什么 右边都参与运算</span></span><br><span class="line"><span class="comment">          ||：当左边为true时， 右边不参与运算  ==》 推荐使用</span></span><br><span class="line"><span class="comment">*/</span><span class="comment">/*--------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*  java移位运算&gt;&gt;和&gt;&gt;&gt;的区别：</span></span><br><span class="line"><span class="comment">    &gt;&gt;x: 向着右移x位，最高位是什么就补什么</span></span><br><span class="line"><span class="comment">   &gt;&gt;&gt;x: 向着右移x位，无论最高位是什么都补0  ==》 无符号右移的结果肯定是正数</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>(4) java获取最大最小值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> max = java.lang.Integer.MAX_VALUE;<span class="comment">//java.lang.可以省略</span></span><br><span class="line"><span class="keyword">int</span> min = java.lang.Integer.MIN_VALUE;</span><br><span class="line"><span class="comment">/*此外 java.lang.Integer下还有以下函数:</span></span><br><span class="line"><span class="comment">**	java.lang.Integer.min() .max() .tostring() .compare()</span></span><br><span class="line"><span class="comment">**	.getInteger() .parseInt(string)等等....</span></span><br><span class="line"><span class="comment">**/</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/20/C%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0/" rel="prev" title="C语言笔记">
+                C语言笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">achange</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#开始：我所理解的Java到底是解释型语言还是编译型语言"><span class="nav-number">1.</span> <span class="nav-text">开始：我所理解的Java到底是解释型语言还是编译型语言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java是编译型的还是解释型的"><span class="nav-number">2.</span> <span class="nav-text">java是编译型的还是解释型的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态语言和动态语言"><span class="nav-number">3.</span> <span class="nav-text">静态语言和动态语言</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">achange</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

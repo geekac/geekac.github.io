@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="距离上一篇文章《python内置库之argparse》已经将近有一个月了，最近因为女票转了一个小方向，开始做Go语言的相关开发，自己也跟着琢磨了一下。把最近关于的Go开发环境搭建的知识总结一下。 进入正题，Go语言开发环境搭建。特别声明：基于Windows x64平台 第一步 下载Go安装包对于官方的下载网站：https:&#x2F;&#x2F;golang.org&#x2F;dl&#x2F;，点一下就会发现，emmm...被墙了(这篇">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言开发环境搭建(vscode和Goland)">
+<meta property="og:url" content="https://geekac.github.io/2018/12/10/Go%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-vscode%E5%92%8CGoland/index.html">
+<meta property="og:site_name" content="Achange&#39;s home">
+<meta property="og:description" content="距离上一篇文章《python内置库之argparse》已经将近有一个月了，最近因为女票转了一个小方向，开始做Go语言的相关开发，自己也跟着琢磨了一下。把最近关于的Go开发环境搭建的知识总结一下。 进入正题，Go语言开发环境搭建。特别声明：基于Windows x64平台 第一步 下载Go安装包对于官方的下载网站：https:&#x2F;&#x2F;golang.org&#x2F;dl&#x2F;，点一下就会发现，emmm...被墙了(这篇">
+<meta property="article:published_time" content="2018-12-10T08:16:36.000Z">
+<meta property="article:modified_time" content="2018-12-10T09:31:33.427Z">
+<meta property="article:author" content="achange">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://geekac.github.io/2018/12/10/Go语言开发环境搭建-vscode和Goland/"/>
+
+
+
+
+
+  <title>Go语言开发环境搭建(vscode和Goland) | Achange's home</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Achange's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I think, therefore i am.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://geekac.github.io/2018/12/10/Go%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-vscode%E5%92%8CGoland/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="achange">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Achange's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Go语言开发环境搭建(vscode和Goland)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-10T16:16:36+08:00">
+                2018-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/C-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">C++编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>距离上一篇文章《python内置库之argparse》已经将近有一个月了，最近因为女票转了一个小方向，开始做Go语言的相关开发，自己也跟着琢磨了一下。把最近关于的Go开发环境搭建的知识总结一下。</p>
+<p>进入正题，Go语言开发环境搭建。<span style="color:red">特别声明</span>：基于Windows x64平台</p>
+<h3 id="第一步-下载Go安装包"><a href="#第一步-下载Go安装包" class="headerlink" title="第一步 下载Go安装包"></a>第一步 下载Go安装包</h3><p>对于官方的下载网站：<a href="https://golang.org/dl/，点一下就会发现，emmm...被墙了(这篇文章出生的时候是这样的)。所以推荐的下载地址是[Go语言中文网](https://golang.org/dl/)，另外吐槽一下Golang中国提供的安装包更新速度也太慢了...不推荐！" target="_blank" rel="noopener">https://golang.org/dl/，点一下就会发现，emmm...被墙了(这篇文章出生的时候是这样的)。所以推荐的下载地址是[Go语言中文网](https://golang.org/dl/)，另外吐槽一下Golang中国提供的安装包更新速度也太慢了...不推荐！</a></p>
+<p>选择一个路径进行安装，安装的过程中，安装程序已经为我们建好了第一个关键目录：GOROOT</p>
+<p>并且已经将go.exe的路径也添加到了系统路径$path</p>
+<h3 id="第二步-设置GOPATH路径"><a href="#第二步-设置GOPATH路径" class="headerlink" title="第二步 设置GOPATH路径"></a>第二步 设置GOPATH路径</h3><p>先讲下GOPATH的作用：很多博客把GOPATH当做开发项目的文件目录，这样做没有错，但是使用vscode当做IDE的时候，每次都会检查很多下载的第三方包的源码，非常麻烦。这个问题可以通过在<code>GOPATH/src</code>下新建项目，然后只在vscode中打开该项目文件夹解决。集中管理了Go的项目，但是这样不够灵活，看个人喜好吧。</p>
+<br>
+
+<p>在这里提供的方法是将下载的第三包和项目分隔开，项目可以建在任何目录下，同时也不污染安装的Go安装包路径。当然也可以将项目建在<code>GOPATH/src</code>下！</p>
+<br>
+
+<p>新建环境变量比较容易，不懂自行百度。需要注意的是，GOPATH是设置在<strong>用户变量</strong>，而不是系统变量！</p>
+<p><strong>设置GOCACHE变量</strong></p>
+<p>​       默认是在C盘下的，对于C盘比较紧张的同学，同样可以在用户变量下新建GOCACHE变量。</p>
+<h3 id="第三步-配置go-vscode开发环境"><a href="#第三步-配置go-vscode开发环境" class="headerlink" title="第三步 配置go+vscode开发环境"></a>第三步 配置go+vscode开发环境</h3><p>首先安装vscode，包括设置中文都不再详述(自行google/baidu)，然后<code>ctrl+shift+X</code>添加Go的扩展。</p>
+<p>重启vscode使其支持Go扩展，使用vscode打开一个go项目(即<code>打开文件夹</code>)。</p>
+<p>打开项目之后，会提示安装一些插件，比如dlv调试。</p>
+<p>如果网络没有被墙，直接点击<code>install all</code>即可。如果被墙了，先关闭vscode，使用下面的方法先将插件下载到本地：</p>
+<p>直接使用命令<code>go install xxx</code>安装插件时，根据报错信息可以得知Go语言的插件存放目录是在$GOROOT/src和$GOPATH/src两个目录下，对于GOROOT文件夹内的东西，我们在确认使用的安装Go的版本之后，一般不动里面的文件。因此，我们把下载的插件安装到$GOPATH/src路径下。</p>
+<br>
+
+<p>在$GOPATH/src下建立如下文件夹;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$GOPATH&#x2F;src&#x2F;github.com&#x2F;</span><br><span class="line">$GOPATH&#x2F;src&#x2F;golang.org&#x2F;x&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>这是因为，Go的包有可能直接去github.com上下载，也有可能去golang.org(一般是官方的插件)寻找！</p>
+<p>但是实际上所有的插件都可以在 <a href="https://github.com/" target="_blank" rel="noopener">https://github.com/</a> 上找到。Golang官方包在 <a href="https://github.com/golang/，其他第三方包，可以在github上搜。比如dlv插件：https://github.com/derekparker/delve" target="_blank" rel="noopener">https://github.com/golang/，其他第三方包，可以在github上搜。比如dlv插件：https://github.com/derekparker/delve</a></p>
+<p><strong>下载插件</strong></p>
+<p>官方插件，需要在DOS窗口切换到<code>$GOPATH/src/golang.org/x/</code>目录下，使用以下命令下载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;golang&#x2F;tools.git tools</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;golang&#x2F;lint.git lint</span><br></pre></td></tr></table></figure>
+
+<p>第三方插件，需要在DOS窗口切换到<code>$GOPATH/src/github.com/</code>目录下，使用以下命令<span style="color:red">直接安装</span>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com&#x2F;derekparker&#x2F;delve&#x2F;cmd&#x2F;dlv</span><br><span class="line">## 也可以先下载，后安装：</span><br><span class="line">go get github.com&#x2F;jung-kurt&#x2F;gofpdf</span><br><span class="line">go get -u -v github.com&#x2F;jung-kurt&#x2F;gofpdf&#x2F;...</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装插件</strong></p>
+<p>打开vscode，点击<code>install all</code>即可。如果还有插件安装失败，按照上面的方法对号入座即可。</p>
+<p><strong>最后，给vscode配置GOPATH/GOROOT</strong></p>
+<p>在<code>文件-&gt;首选项-&gt;设置</code>中打开Settings，不是直接的文本方式的，可以找到<code>在settings.json中编辑</code>点击进入文本方式进行配置。</p>
+<p>在右边<code>用户设置</code>添加如下代码(自行替换路径)：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">"go.gopath": "D:/ProgramData/Golang/GOPATH",</span><br><span class="line">"go.goroot": "D:/Program Files/Go",</span><br></pre></td></tr></table></figure>
+
+
+
+<p>至此，基本安装好了vscode+go的环境。</p>
+<h3 id="第四步-配置go-goland开发环境"><a href="#第四步-配置go-goland开发环境" class="headerlink" title="第四步 配置go+goland开发环境"></a>第四步 配置go+goland开发环境</h3><p>使用goland打开项目，打开<code>File-&gt;Settings-&gt;Go</code>可以看到基本已经是配置好的了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/18/python%E5%86%85%E7%BD%AE%E5%BA%93%E4%B9%8Bargparse/" rel="next" title="python内置库之argparse">
+                <i class="fa fa-chevron-left"></i> python内置库之argparse
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/25/Pytorch%E4%BD%BF%E7%94%A8%E5%8D%8A%E7%B2%BE%E5%BA%A6%E8%AE%AD%E7%BB%83/" rel="prev" title="'Pytorch使用半精度训练'">
+                'Pytorch使用半精度训练' <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">achange</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步-下载Go安装包"><span class="nav-number">1.</span> <span class="nav-text">第一步 下载Go安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步-设置GOPATH路径"><span class="nav-number">2.</span> <span class="nav-text">第二步 设置GOPATH路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步-配置go-vscode开发环境"><span class="nav-number">3.</span> <span class="nav-text">第三步 配置go+vscode开发环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步-配置go-goland开发环境"><span class="nav-number">4.</span> <span class="nav-text">第四步 配置go+goland开发环境</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">achange</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

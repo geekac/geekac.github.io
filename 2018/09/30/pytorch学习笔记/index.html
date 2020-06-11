@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="从2018年4月至今，一直在使用Pytorch框架进行基于深度学习的图像分割、分类训练。没有对Pytorch进行系统的学习和总结。特今天写这篇博客，来总结一下Pytorch 0.4.1版本 在深度学习应用的上的实践。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pytorch学习笔记">
+<meta property="og:url" content="https://geekac.github.io/2018/09/30/pytorch%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Achange&#39;s home">
+<meta property="og:description" content="从2018年4月至今，一直在使用Pytorch框架进行基于深度学习的图像分割、分类训练。没有对Pytorch进行系统的学习和总结。特今天写这篇博客，来总结一下Pytorch 0.4.1版本 在深度学习应用的上的实践。">
+<meta property="article:published_time" content="2018-09-29T18:24:52.000Z">
+<meta property="article:modified_time" content="2018-11-29T10:42:00.003Z">
+<meta property="article:author" content="achange">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://geekac.github.io/2018/09/30/pytorch学习笔记/"/>
+
+
+
+
+
+  <title>Pytorch学习笔记 | Achange's home</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Achange's home</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I think, therefore i am.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://geekac.github.io/2018/09/30/pytorch%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="achange">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Achange's home">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Pytorch学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-30T02:24:52+08:00">
+                2018-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习框架</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从2018年4月至今，一直在使用Pytorch框架进行基于深度学习的图像分割、分类训练。没有对Pytorch进行系统的学习和总结。特今天写这篇博客，来总结一下Pytorch <strong>0.4.1</strong>版本 在深度学习应用的上的实践。</p>
+<a id="more"></a>
+
+
+
+<p>任何一个深度学习框架都要实现张量(矩阵)的存储与表示，任何一个基于GPU加速的框架都是调用CUDA进行加速计算的，因此也必须使用NAVIDA的显卡来进行加速(目前市场如此，未来也会格局会变)。大部分深度学习框架同时支持CPU和GPU，比如Tensorflow、Pytorch。深度学习自然离不开反向传播算法，所有机器学习的目标都是通过计算使得其于目标解相近，也就是使得LOSS变小，LOSS的定义就是我们认为机器学习并预测的结果和实际的差距。反向传播算法使用链式求导法则，因此任何深度学习框架都要实现<strong>自动求导</strong>(auto-grad: automatic differentiation)的功能(参数太多，手动求导不太现实)。</p>
+<p>一直很喜欢Pytorch，因为其使用动态计算的概念，能直接计算并得到结果。随着发展，Tensorflow也实现了其Eager 模式下动态图机制。</p>
+<p>本篇按照以下大纲开始对Pytorch总结：</p>
+<p>​    </p>
+<p>1.张量(矩阵)</p>
+<p>2.</p>
+<h4 id="Pytorch张量"><a href="#Pytorch张量" class="headerlink" title="Pytorch张量"></a>Pytorch张量</h4><p>矩阵是深度学习的数据表现方式，也是进行计算的基本单位。在Pytorch中，使用torch.Tensor来表示、存储张量，类似的Numpy中使用的numpy.ndarray。</p>
+<p>pytorch 0.4.1版本支持的张量类型表：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Data type</th>
+<th>dtype</th>
+<th align="left">CPU tensor</th>
+<th>GPU tensor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">32-bit floating point</td>
+<td><code>torch.float32</code> or <code>torch.float</code></td>
+<td align="left"><code>torch.FloatTensor</code></td>
+<td><code>torch.cuda.FloatTensor</code></td>
+</tr>
+<tr>
+<td align="center">64-bit floating point</td>
+<td><code>torch.float64</code> or <code>torch.double</code></td>
+<td align="left"><code>torch.DoubleTensor</code></td>
+<td><code>torch.cuda.DoubleTensor</code></td>
+</tr>
+<tr>
+<td align="center">16-bit floating point</td>
+<td><code>torch.float16</code> or <code>torch.half</code></td>
+<td align="left"><code>torch.HalfTensor</code></td>
+<td><code>torch.cuda.HalfTensor</code></td>
+</tr>
+<tr>
+<td align="center">8-bit integer (unsigned)</td>
+<td><code>torch.uint8</code></td>
+<td align="left"><code>torch.ByteTensor</code></td>
+<td><code>torch.cuda.ByteTensor</code></td>
+</tr>
+<tr>
+<td align="center">8-bit integer (signed)</td>
+<td><code>torch.int8</code></td>
+<td align="left"><code>torch.CharTensor</code></td>
+<td><code>torch.cuda.CharTensor</code></td>
+</tr>
+<tr>
+<td align="center">16-bit integer (signed)</td>
+<td><code>torch.int16</code> or <code>torch.short</code></td>
+<td align="left"><code>torch.ShortTensor</code></td>
+<td><code>torch.cuda.ShortTensor</code></td>
+</tr>
+<tr>
+<td align="center">32-bit integer (signed)</td>
+<td><code>torch.int32</code> or <code>torch.int</code></td>
+<td align="left"><code>torch.IntTensor</code></td>
+<td><code>torch.cuda.IntTensor</code></td>
+</tr>
+<tr>
+<td align="center">64-bit integer (signed)</td>
+<td><code>torch.int64</code> or <code>torch.long</code></td>
+<td align="left"><code>torch.LongTensor</code></td>
+<td><code>torch.cuda.LongTensor</code></td>
+</tr>
+</tbody></table>
+<h5 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h5><p>从pytorch 0.4.0版本，pytorch就合并了变量(torch.autograd.Variable)和torch.Tensor，不像Tensorflow中还存在着常量。但是从0.4.0版本，pytorch支持了一种<strong>0维的Tensor</strong>，也就是<strong>标量</strong>，其定义方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">x = torch.tensor(<span class="number">3.14</span>)		<span class="comment"># tensor(3.1400)</span></span><br><span class="line">print(x.size())				<span class="comment"># torch.Size([])  表示：scalar is 0-dimensional</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 要和一维度的张量区分开</span></span><br><span class="line">y = torch.tensor([<span class="number">3.14</span>])	<span class="comment"># tensor([3.1400])</span></span><br><span class="line">print(y.size())				<span class="comment"># torch.Size([1]) ： 1-dimensional</span></span><br></pre></td></tr></table></figure>
+
+<p>对于<code>0-dimensional</code>和<code>1-dimensional</code>的张量来说，获取其值(data)的方法是使用<code>x.item()/y.item()</code></p>
+<p>​    </p>
+<p>或者使用<code>x.data.item()</code>，对于1维的张量也可以使用下标的方式：<code>y[0]</code></p>
+<p><strong>定义其他高维数组</strong></p>
+<p>可以使用torch.randn(size=())，size后面填入张量的维度。当然也可以使用<code>torch.from_numpy</code>创建一个高维度的张量。</p>
+<p>需要注意的是：</p>
+<ul>
+<li><p>pytorch张量的类型的判定</p>
+<p>使用内置的type(torch_tensor)函数只能得到<code>&lt;class &#39;torch.Tensor&#39;&gt;</code></p>
+<p>要想得到更详细的类型，需要使用<code>torch_tensor.type()</code>函数</p>
+<p>或者，使用内置函数<code>isinstance()</code>来判定张量是否为某一个具体类型</p>
+</li>
+</ul>
+<p>​            </p>
+<h5 id="pytorch张量类型及其转换"><a href="#pytorch张量类型及其转换" class="headerlink" title="pytorch张量类型及其转换"></a>pytorch张量类型及其转换</h5><blockquote>
+<p>基本介绍<br>pytorch构造张量的函数一般默认构造张量的数据类型是torch.float32，比如torch.empty()/torch.rand()/<br>torch.rand()/torch.tensor()…</p>
+</blockquote>
+<ul>
+<li><p>构造张量的常用函数</p>
+<ul>
+<li>torch.rand(size): 包含了从区间[0, 1)的<strong>均匀分布</strong>中抽取的一组随机数。</li>
+<li>torch.randn(size): 包含了从<strong>标准正态分布</strong>(均值为0，方差为1，即高斯白噪声) 中抽取的一组随机数。</li>
+<li>torch.tensor(vals, dtype=/): 指定张量的值，会强制转换为dtype类型。可能丢失精度</li>
+<li>torch.empty(size, dtype=/): 创建不加初始化的张量</li>
+<li>torch.from_numpy(np.ndarray): 将numpy转换为Tensor</li>
+<li>torch.eye(int n, [int m, ]dtype=/): 创建单位矩阵，指定m时可以不是方阵</li>
+</ul>
+<p>获取张量的类型 : <code>tensor.dtype</code><br>获取张量的size:  <code>tensor.size()</code></p>
+</li>
+</ul>
+<br>
+
+<ul>
+<li><p>*<em>类型转换 *</em> (以torch.float32→torch.double为例)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">x = torch.randn((<span class="number">2</span>, <span class="number">3</span>))</span><br><span class="line"><span class="comment"># 方法1  【注1】:torch.DoubleTensor=torch.double=torch.float64</span></span><br><span class="line">x = x.type(torch.double)</span><br><span class="line">x = x.type(torch.DoubleTensor)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法2</span></span><br><span class="line">x = x.double()</span><br></pre></td></tr></table></figure>
+
+<br>
+</li>
+<li><p><strong>GPU张量和CPU张量转换</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">data = torch.randn((<span class="number">2</span>, <span class="number">3</span>))</span><br><span class="line"><span class="comment"># 方法1：首先检测GPU设备是否可用--不检测不一定会报错</span></span><br><span class="line">cuda = torch.cuda.is_available()  <span class="comment"># 检测</span></span><br><span class="line">data = data.cuda() <span class="keyword">if</span> cuda <span class="keyword">else</span> data.cpu()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法2：有GPU则优先使用</span></span><br><span class="line">device = torch.device(<span class="string">"cuda:0"</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">"cpu"</span>)</span><br><span class="line">tensor.to(device)</span><br><span class="line"><span class="comment"># 多GPU时指定GPU：id从0开始</span></span><br><span class="line">torch.cuda.set_device(id)</span><br><span class="line"><span class="comment"># 多GPU时进行GPU并行处理加速</span></span><br><span class="line">gpus = torch.cuda.device_count()<span class="comment"># 获取GPU数目</span></span><br><span class="line">model = nn.DataParallel(model)</span><br><span class="line">new_net = nn.DataParallel(net, device_ids=[<span class="number">0</span>, <span class="number">1</span>])</span><br><span class="line">nn.parallel.data_parallel(new_net, input, device_ids=[<span class="number">0</span>, <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">"""Important: GPU张量转换为CPU张量--→numpy数据"""</span></span><br><span class="line">cudaTensor.data.cpu().numpy()</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>补充: tensorflow张量与numpy转换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">ndarray = np.ones([<span class="number">3</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">print(<span class="string">"TensorFlow operations convert numpy arrays to Tensors automatically"</span>)</span><br><span class="line">tensor = tf.multiply(ndarray, <span class="number">42</span>)</span><br><span class="line">print(tensor)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(<span class="string">"And NumPy operations convert Tensors to numpy arrays automatically"</span>)</span><br><span class="line">print(np.add(tensor, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">print(<span class="string">"The .numpy() method explicitly converts a Tensor to a numpy array"</span>)</span><br><span class="line">print(tensor.numpy())</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+</li>
+</ul>
+<h5 id="张量计算"><a href="#张量计算" class="headerlink" title="张量计算"></a>张量计算</h5><p>所有张量有关的运算：</p>
+<ul>
+<li><a href="https://pytorch.org/docs/stable/torch.html" target="_blank" rel="noopener">https://pytorch.org/docs/stable/torch.html</a></li>
+<li>以及： <a href="https://pytorch.org/docs/stable/tensors.html" target="_blank" rel="noopener">https://pytorch.org/docs/stable/tensors.html</a></li>
+</ul>
+<p>这里列举出一些常用的计算函数：</p>
+<ul>
+<li><p>torch.norm(input, p=2)：计算张量input的L-p范数。<span style="color:red">注意：默认值p=2。</span></p>
+<p>比如L1范数是对所有权重W的绝对值求和，L2范数是对所有权重W进行逐元素的平方求和。这两个范数一般用于损失函数后面的一个额外项，用于防止过拟合提高算法的泛化能力，称为<strong>正则化惩罚</strong></p>
+</li>
+<li><p>torch_tensor.permute(<em>*dims</em>)：交换tensor的维度，类似于<code>numpy.transpose(arr, (0, 2, 1))</code></p>
+<p>等价于torch_tensor.permute(0, 2, 1)，假设张量的维度都是3。 <span style="color:red">理解为位置映射</span></p>
+</li>
+<li></li>
+</ul>
+<h5 id="张量求导运算"><a href="#张量求导运算" class="headerlink" title="张量求导运算"></a>张量求导运算</h5><p>   对于torch.Tensor，在反向传播过程中，使用<code>requires_grad=True</code>属性判定该张量是可以反向传播的张量。比如神经网络中的参数<strong>W</strong> (weight)和<strong>b</strong> (bias)，其requires_grad一定为True。先把代码亮出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认的requires_grad=False</span></span><br><span class="line">u = torch.tensor([<span class="number">1</span>])</span><br><span class="line">print(u.grad_fn)		<span class="comment"># None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 和requires_grad=True的相关变量的requires_grad都等于True</span></span><br><span class="line">x = torch.ones(<span class="number">2</span>, <span class="number">2</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">y = x + <span class="number">2</span></span><br><span class="line">z = y * y * <span class="number">3</span></span><br><span class="line">out = z.mean()</span><br><span class="line">print(out.grad_fn)</span><br><span class="line">out.backward()	<span class="comment"># 反向传播</span></span><br><span class="line">print(x.grad)</span><br></pre></td></tr></table></figure>
+
+<p><code>grad_fn</code>和<code>backward</code>函数详解：</p>
+<ul>
+<li><span style="color:red">只有浮点类型的张量才可以求梯度。</span></li>
+</ul>
+<p>​            </p>
+<ul>
+<li>只有<strong>标量</strong>以及<strong>维度为1</strong>，且<code>requires_grad=True</code>的张量才有backward()方法！<ul>
+<li>因此深度网络的loss 最终一般是维度为1 的张量，计算为一个数值。</li>
+<li>默认情况下，一个<code>requires_grad=True</code>的张量x_tensor的梯度<code>x_tensor</code>为<strong>None</strong></li>
+<li><span style="color:red">在调用backward之后，中间变量的梯度(grad)为<strong>None</strong>，除非这个中间变量=基本变量</span></li>
+</ul>
+</li>
+</ul>
+<p>注意两个函数：</p>
+<p>​    </p>
+<p>​        </p>
+<ul>
+<li><code>with torch.enable_grad():</code>这是某人情况下的时候，可以求导的张量在这个上下文下可以求导、反向传播，但是不能使requires_grad=False变得可以求导！！！</li>
+<li><code>with torch.no_grad():</code>  可以求导的张量在这个上下文中，变得不可以求导以及反向传播。</li>
+</ul>
+<p>这在训练过程中，对训练的效果进行验证/测试时很重要，一般我们只在训练的时候进行反向传播。</p>
+<h5 id="pytorch可视化工具visdom库"><a href="#pytorch可视化工具visdom库" class="headerlink" title="pytorch可视化工具visdom库"></a>pytorch可视化工具visdom库</h5><p>(1) 安装与启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 在dos窗口执行：</span><br><span class="line">pip install visdom</span><br><span class="line">python -m visdom.server # 创建一个visdom server</span><br><span class="line">	&#x2F;&#x2F; 该命令可以后跟参数，常用的：</span><br><span class="line">	python -m visdom.server -port 8098</span><br><span class="line">	python -m visdom.server -hostname http:&#x2F;&#x2F;localhost&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>创建visdom实例：viz = visdom.Visdom(port=8097 env=’main’, server=””<a href="http://localhost&quot;&quot;" target="_blank" rel="noopener">http://localhost&quot;&quot;</a>)</p>
+<p>结合使用：在制定窗口可视化pytorch训练。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os, visdom</span><br><span class="line">res = os.popen(<span class="string">"python -m visdom.server -port &#123;&#125; -hostname &#123;&#125;"</span>.format(FLAGS.port, </span><br><span class="line">                                                                      FLAGS.server))</span><br><span class="line"><span class="comment"># print(res.read())</span></span><br><span class="line">viz = Visdom(port=FLAGS.port, server=FLAGS.server, env=<span class="string">"achang"</span>)</span><br><span class="line"><span class="keyword">assert</span> viz.check_connection(timeout_seconds=<span class="number">3</span>),</span><br><span class="line">							<span class="string">'No connection could be formed quickly'</span></span><br><span class="line">textwindow = viz.text(<span class="string">'Hello World!'</span>)</span><br><span class="line"><span class="string">"""..."""</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<br>
+
+<br>
+
+<p style="color:#222;"><b>THE END&nbsp;:)</b></p>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/27/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84s/" rel="next" title="卷积神经网络结构s">
+                <i class="fa fa-chevron-left"></i> 卷积神经网络结构s
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/08/python%E6%89%A9%E5%B1%95%E5%BA%93/" rel="prev" title="python扩展库">
+                python扩展库 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">achange</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7Carchive">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pytorch张量"><span class="nav-number">1.</span> <span class="nav-text">Pytorch张量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本介绍"><span class="nav-number">1.1.</span> <span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pytorch张量类型及其转换"><span class="nav-number">1.2.</span> <span class="nav-text">pytorch张量类型及其转换</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#张量计算"><span class="nav-number">1.3.</span> <span class="nav-text">张量计算</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#张量求导运算"><span class="nav-number">1.4.</span> <span class="nav-text">张量求导运算</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pytorch可视化工具visdom库"><span class="nav-number">1.5.</span> <span class="nav-text">pytorch可视化工具visdom库</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">achange</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
